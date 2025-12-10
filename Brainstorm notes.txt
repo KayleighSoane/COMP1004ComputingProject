@@ -1,4 +1,4 @@
-Research plan
+Notes
 html will be front-end interface
 css will be page design
 js will be back-end API integration
@@ -25,7 +25,11 @@ LibreTranslate API - free open source
 - can translate across 17 languages
 - "fast and accurate" - according to them
 
+Can I use AI instead?
+- pre-trained models
+- read geeks for geeks building simple language translator using pre-trained translation model
 
 
-Make a gantt chart to show sprints
+Make a gantt chart to show sprints, update initial plan
 Focus on UI first, show this in mid-project plan
+develop API continuously
