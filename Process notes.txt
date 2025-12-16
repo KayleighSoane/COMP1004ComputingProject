@@ -1,0 +1,19 @@
+Process notes
+
+Created html, css and js files
+First focussed on designing ui
+Created sections on html to plan what ill need before coding
+Created sections for each box on page
+Formatted so that they were next to eachother - process called flexbox
+
+Came up with more ideas:
+language selectors would have to be dropdown menus
+Could make page navigation bar to an about page, help page etc
+If text is too long, scroll down within box or make text smaller to fit
+Want to have initial text in boxes that is replaced once user types stuff
+
+Basic dropdowns created - for now, doesn't need to be complicated.
+For future - will have to link translation language to dropdown selection.
+In future, could make code that if input is detected as English, automatically changes to English
+
+Basic UI created, next need to code user input within textbox that replaces existing text
