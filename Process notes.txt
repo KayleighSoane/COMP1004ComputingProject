@@ -1,5 +1,7 @@
 Process notes
 
+Researching tutorials and looking at popular browser translators for inspiration and ideas for features, design etc
+
 Created html, css and js files
 First focussed on designing ui
 Created sections on html to plan what ill need before coding
@@ -17,3 +19,16 @@ For future - will have to link translation language to dropdown selection.
 In future, could make code that if input is detected as English, automatically changes to English
 
 Basic UI created, next need to code user input within textbox that replaces existing text
+Created text input using form & textarea. Placeholder text is displayed before user input. Will link input to js to translate the test and display is in output box.
+
+Need to make translation software before making output field else there is no output
+Morse code translator created manually
+Created morse code and alphabet arrays in js - while it doesn't use APIs, helps build my understanding of js to make using APIs later easier.
+Idea is to get input text, identify it with alphabet array, and change it into corresponding morse code array value and present as output.
+Needs to work vice versa too
+
+morse translator works
+	future features: help page about formatting morse to get correct translation - only appears if morse is selected as input language
+
+Changed code so dropdown values dont have to be defined in html, but in java
+- morse code logic still works

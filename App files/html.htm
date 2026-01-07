@@ -3,46 +3,88 @@
 <html>
 
     <head>
+
         <meta charset="utf-8">
         <link rel="stylesheet" href="css.css">
-        <script src="js.js"></script>
+        
+        <title>Wordio - Translator</title>
+        
+        <script src="https://kit.fontawesome.com/bc24f2ee3e.js" crossorigin="anonymous"></script>
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+        <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+        <link rel="manifest" href="/favicon/site.webmanifest">
 
-        <title></title>
     </head> 
 
 
     <body>
 
-        <div class="Box" id="title">
+        <div id="titlehead">
+            <div id="title">
             <h1>Wordio</h1>
-        </div>
-
-        <div class="textboxes">
-            <div class="Box" id="input">
-                <div class="dropdown" id="ip">
-                    <select>
-                        <option value="en" selected>English</option>
-                        <option value="mc">Morse Code</option>
-                    </select>
-                </div>
-                <br>
-                <p>Enter text...</p>
+            </div>
+            
+            <div id="githublink"><i class="fa-brands fa-github"></i></div>
+            <div id="about">
+                <button id="aboutbtn"><i class="fa-solid fa-question"></i></button>
             </div>
 
-            <div class="Box" id="output">
-                <div class="dropdown" id="op">
-                    <select>
-                        <option value="en">English</option>
-                        <option value="mc" selected>Morse Code</option>
-                    </select>
-                </div>
-                <br>
-                <p>Translation</p>
-            </div>
         </div>
+
+        <div id="theme">
+            <select id="theme-select">
+                <option value="light" selected>Light Mode</option>
+                <option value="dark">Dark Mode</option>
+            </select>
+            <!-- can click, temporary message with how to use.
+            click off to disappear-->
+        </div>
+
+        <br>
+
+        <div id="display">
+
+            <div class="textboxes">
+                
+                <div id="input">
+                    
+                    <div class="ipdown">
+                        <select class="ttext" id="ip"></select>
+                    </div>
+                    
+                    <br><br>
+                    <textarea id="userinput" autocomplete="on" placeholder ="Enter text..." label="Text input"></textarea>
+
+                    <button id="ipspeech"><i class="fa-solid fa-microphone"></i></button>
+                    <button id="swap"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
+                </div>
+                
+                <div id="output">
+                    
+                    <div class="opdown">
+                        <select class="ttext"id="op"></select> <!-- coded in js.js -->
+                    </div>
+                    
+                    <br><br>
+                    <textarea readonly id="textoutput" autocomplete="on"placeholder ="Translation" label="Text output"></textarea>
+                    
+                    <button id="opspeech"><i class="fa-solid fa-microphone"></i></button>
+                    <button id="opcopy"><i class="fa-regular fa-copy"></i></button>
+
+                </div>
+                
+                
+            </div>
+            
+            <input type="submit" id="sub" value="Translate">
+
+        </div>
+
+        <script src="languages.js"></script>
+        <script src="translation.js"></script>
 
     </body>
 
 </html>
-
-        <

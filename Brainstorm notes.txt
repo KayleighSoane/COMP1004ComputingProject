@@ -6,11 +6,12 @@ js will be back-end API integration
 Write notes on everything I do to make accurate project reviews
 
 
-Can start project to translate morse code - easy, 26 letters to translate
+Can start project to translate morse code - easy, direct translation
 - will translate both ways
 
 Useful websites - 
 Geeks for geeks
+W3
 
 Translation APIs - 
 
@@ -18,12 +19,7 @@ Connects to service provider
 Input text is processed
 Translated content is returned in real time ready for immediate use
 
-Google translation API - best but not free
-
-LibreTranslate API - free open source
-- doesn't need to be downloaded - available when a person uses the wpa - need internet connection?
-- can translate across 17 languages
-- "fast and accurate" - according to them
+Google translation API
 
 Can I use AI instead?
 - pre-trained models

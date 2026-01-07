@@ -1,52 +1,205 @@
-.Box {
-    text-align: center;
-    border: 2px solid lightgrey;
-    border-radius: 10px;
+body {
+    background-color: rgb(252, 252, 252);
+}
+
+#titlehead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-content: center;
+    margin: auto;
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(237, 237, 237);
+    border-radius: 5px;
+    height: 40px;
+    width: 100%;
+}
+
+#title {
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+}
+
+#githublink {
+    margin-left: auto;
+    margin-right: 5px;
+    font-size: 24px;
+    color:rgb(77, 77, 77)
+}
+
+#githublink:hover {
+    transition-duration: 0.3s;
+    color: black;
+    font-size: 26px;
+}
+
+#aboutbtn {
+    margin-left: auto;
+    padding: 5px;
+    background-color: rgb(200, 200, 200);
+    border: none;
+    border-radius: 50%;
+    font-family: Arial;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#aboutbtn:hover {
+    transition-duration: 0.3s;
+    background-color: rgb(170, 170, 170);
+    font-size: 14px;
+}
+
+#theme {
+    position: relative;
+    float: right;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+#theme-select {
+    border-radius: 50px;
+    font-size: 12px;
+    padding: 6px;
+    background-color:white;
+    cursor: pointer;
+}
+
+body.light-mode {
+    background-color: white;
+    color: black;
+}
+
+#input, #output { /* individual boxes */
+    width: 50%;
+    height: 100%;
+    text-align: left;
     box-sizing: border-box;
     padding: 5px;
 }
 
-#title {
-    width: 100%;
-}
-
 #input {
-    width: 300px;
-    height: 300px;
-    margin: 10px;
+    border-right: 1px solid rgb(157, 157, 157);
+    background-color: white;
+    border-top-left-radius: 5px;
 }
 
-#output {    
-    width: 300px;
-    height: 300px;
-    margin: 10px;
+#output {
+    border-left: 1px solid rgb(157, 157, 157);
+    border-top-right-radius: 5px;
 }
 
-.textboxes {
+#textoutput, #output {
+    background-color: rgb(245, 245, 245);
+}
+
+::placeholder, #textoutput{ /* placeholder text and output text */
+    font-weight: bold;
+}
+
+.textboxes {  /* surrounds both boxes */
     display: flex;
     justify-content: center;
-    margin: 10px;
+    margin: auto;
+    height: 250px;
 }
 
-h1 {
-    font-family: 'Courier New', Courier, monospace;
-    letter-spacing: 2px;
+#display { /* total display box including translate button*/
+    box-shadow: 3px 3px 5px grey;
+    border: 1px solid #dadada;
+    justify-content: center;
+    margin: 50px auto;
+    box-sizing: border-box;
+    width: 80%;
+    border-radius: 5px;
+}
+
+#userinput, #textoutput { /* text areas */
+    align-items:center;
+    border: none;
+    outline: none;
+    font-family: Arial;
+    text-align: left;
+    font-size: 16px;
+    margin: auto;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    height: 75%;
+    width: 100%;
+    resize: none;
 }
 
 p {
     font-family: Arial;
     font-weight: bold;
     text-align: left;
-    font-size: 18px;
+    font-size: 14px;
     margin: 15px;
 }
 
-.dropdown {
-    float: right;
-    padding: 5px;
+#ip { /* input dropdown */
+    background-color: rgb(243, 243, 243);
 }
 
-select {
+#op { /* output dropdown */
+    background-color: white;
+}
+
+
+#ip, #op { /* both dropdown menus */
+    float: right;
+    padding: 5px;
+    overflow: auto;
+    position: relative;
     font-family: Arial;
+    border: none;
+    font-size: 14px;
+    width: 100%;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#ip:hover, #op:hover {
+    transition-duration: 0.3s;
+    font-weight: bold;
+    border: 1px solid rgb(150, 150, 150);
+}
+
+#sub {
     font-size: 16px;
+    width: 100%;
+    height: 30px;
+    font-family: Arial;
+    font-weight: bold;
+    background-color: rgb(224, 224, 224);
+    color: rgb(77, 77, 77);
+    border: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+#sub:hover {
+    background-color: rgb(200, 200, 200);
+    transition-duration: 0.3s;
+    color: rgb(46, 46, 46);
+}
+
+#opcopy, #swap {
+    float: right;
+}
+
+#ipspeech, #opspeech, #opcopy, #swap { 
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgb(77, 77, 77);
+}
+
+#ipspeech:hover, #opspeech:hover, #opcopy:hover, #swap:hover {
+    color: black;
+    transition-duration: 0.1s;
+    font-size: 15px;
 }
