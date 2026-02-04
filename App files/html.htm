@@ -7,7 +7,7 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="css.css">
         
-        <title>Wordio - Translator</title>
+        <title>Wordio</title>
         
         <script src="https://kit.fontawesome.com/bc24f2ee3e.js" crossorigin="anonymous"></script>
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
@@ -21,64 +21,69 @@
 
     <body>
 
-        <div id="titlehead">
+        <div class="titlehead">
             <div id="title">
-            <h1>Wordio</h1>
+                <h1>Wordio</h1>
             </div>
             
-            <div id="githublink"><i class="fa-brands fa-github"></i></div>
-            <div id="about">
-                <button id="aboutbtn"><i class="fa-solid fa-question"></i></button>
+            <div class="tlinks">
+                <div id="github">
+                    <button id="githublink" title="GitHub Repository" onclick="window.open('https://github.com/KayleighSoane/COMP1004ComputingProject', '_blank')"><i class="fa-brands fa-github"></i></button>
+                </div>
+                <div id="about">
+                    <button type="button" id="aboutbtn" title="Help"><i class="fa-solid fa-question"></i></button>
+                    <div id="aboutcontent">
+                        <p>Morse code only translates with English. Mic button speech to text. Arrow button swaps languages. Copy button copies output text. Use theme selector to change to colorblind modes. 
+                        </p>
+                    </div>
+                </div>
             </div>
 
         </div>
 
-        <div id="theme">
-            <select id="theme-select">
+        <div class="theme">
+            <select id="theme-select" title="Theme">
                 <option value="light" selected>Light Mode</option>
                 <option value="dark">Dark Mode</option>
             </select>
-            <!-- can click, temporary message with how to use.
-            click off to disappear-->
         </div>
 
         <br>
 
-        <div id="display">
+        <div class="display">
 
             <div class="textboxes">
                 
                 <div id="input">
                     
                     <div class="ipdown">
-                        <select class="ttext" id="ip"></select>
+                        <select class="ttext" title="Input language" id="ip"></select>
                     </div>
                     
                     <br><br>
-                    <textarea id="userinput" autocomplete="on" placeholder ="Enter text..." label="Text input"></textarea>
+                    <textarea maxlength="5000" id="userinput" autocomplete="on" placeholder ="Enter text..." label="Text input"></textarea>
 
-                    <button id="ipspeech"><i class="fa-solid fa-microphone"></i></button>
-                    <button id="swap"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
+                    <button id="ipspeech" title="Speak"><i class="fa-solid fa-microphone"></i></button>
+                    <button id="swap" title="Swap" onclick="swapLanguages()"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
                 </div>
                 
                 <div id="output">
                     
                     <div class="opdown">
-                        <select class="ttext"id="op"></select> <!-- coded in js.js -->
+                        <select class="ttext" title="Output language" id="op"></select> <!-- coded in js.js -->
                     </div>
                     
                     <br><br>
-                    <textarea readonly id="textoutput" autocomplete="on"placeholder ="Translation" label="Text output"></textarea>
+                    <textarea readonly id="textoutput" autocomplete="on" placeholder ="Translation" label="Text output"></textarea>
                     
-                    <button id="opspeech"><i class="fa-solid fa-microphone"></i></button>
-                    <button id="opcopy"><i class="fa-regular fa-copy"></i></button>
-
+                    <div class="copyset">
+                    <button id="opspeech" title="Speak"><i class="fa-solid fa-microphone"></i></button>
+                    <button id="opcopy" title="Copy" onclick="copyToClipboard()"><i class="fa-solid fa-copy"></i></button>
+                    <div id="copy-message" aria-live="polite" style="display:none;">Copied</div>    
+                    </div>
                 </div>
                 
-                
             </div>
-            
-            <input type="submit" id="sub" value="Translate">
 
         </div>
 

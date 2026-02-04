@@ -2,11 +2,13 @@ let inputtext;
 let outputtext;
 let ipl;
 let opl;
-let submit;
 let lower;
+let copyMessage;
+let translateTimeout;
+let inputspeech = document.getElementById("ipspeech");
+let outputspeech = document.getElementById("opspeech");
 
 // define dropdown languages in js not in html
-// build options after DOM is ready so the selects exist
 document.addEventListener("DOMContentLoaded", function() {
     const lang = document.querySelectorAll(".ttext"); // all select elements with class 'text'
 
@@ -24,20 +26,25 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-
     inputtext = document.getElementById("userinput"); //access to text input area
     outputtext = document.getElementById("textoutput");
     ipl = document.getElementById("ip"); // select element itself
     opl = document.getElementById("op"); // select element itself
-    submit = document.querySelector("input[type='submit']"); //access to submit button
-    enter = document.getElementById("userinput"); //access to text input area for enter key
-    submit.addEventListener("click", translate);
-    enter.addEventListener("keydown", function(event) {
+    copyMessage = document.getElementById("copy-message");
+
+    // inputtext.addEventListener("input", translate, scheduleTranslate);
+    // ipl.addEventListener("change", scheduleTranslate);
+    // opl.addEventListener("change", scheduleTranslate);
+    // above is code needed to get translation automatically without pressing enter
+
+    inputtext.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
-            event.preventDefault(); //prevent form submission on Enter key
             translate();
         }
     });
+    ipl.addEventListener("change", translate);
+    opl.addEventListener("change", translate); // auto changes when languages change
+
 });
 
 //add so if input is english, select english dropdown
@@ -55,7 +62,7 @@ const morse = [
     '-....', '--...', '---..', '----.',
     // .,!?'"-:;"
     '.-.-.-', '--..--', '-.-.--', '..--..', '.----.', '.-..-.', '-....-', '---...', '-.-.-.',
-    ];
+];
 
 const alphabet = [  
     // a-z
@@ -105,25 +112,135 @@ function morsetoenglish() {
     }
 }
 
-//when morse code selected, translate alphabet to morse
-//when english selected, translate morse to alphabet
+function otherlang() {
+    const APIkey = "AIzaSyBwEPByL5_0cTW58rSvYMn4Go_qJOLBCFA"; // Replace with your actual Google Cloud API key
+    const APIlink = `https://translation.googleapis.com/language/translate/v2?key=${APIkey}`;
+    
+    fetch(APIlink, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            q: inputtext.value,
+            source: ipl.value,
+            target: opl.value,
+            format: 'text'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.data && data.data.translations && data.data.translations.length > 0) {
+            outputtext.value = data.data.translations[0].translatedText;
+        } else {
+            outputtext.value = "Error in translation. Please try again.";
+        }
+    })
+    .catch(error => {
+        console.error('Translation error:', error); //write to console for debugging
+        outputtext.value = "Error in translation. Please try again.";
+    });
+}
+
+function scheduleTranslate() { // prevents overloading api with requests on every input change
+    if (!inputtext || !ipl || !opl) {
+        return;
+    }
+    clearTimeout(translateTimeout);
+    translateTimeout = setTimeout(translate, 300); // translates if user stops typing for 300ms
+}
+
 function translate() {
     outputtext.value = ""; //clear output box before new output
     if (ipl.value === opl.value) {
         outputtext.value = inputtext.value; //if both are the same, just copy input to output
+    }
+    else if (inputtext.value === "") { // if no input, clear output
+        outputtext.value = ""; //if input is empty, clear output, dont call translation
     }
     else if (ipl.value === "en" && opl.value === "mc") {
         englishtomorse();
     } 
     else if (ipl.value === "mc" && opl.value === "en") { // morse code only works to english
         morsetoenglish();
+    } else if (ipl.value == "mc" || opl.value === "mc") { // can api translate morse? could use my version for english, and api for others
+        outputtext.value = "Morse Code translation only works to and from English.";
     } else {
-        outputtext.value = "Translation for this pair isn't implemented yet.";
+        otherlang();
     }
-
 };
 
-// need to display output in html output box
-// above code needs to work when input is given and submit button clicked
-// when submit clicked, call function and clear output box before displaying new output
-// if no input, output box remains empty
+
+const btn = document.getElementById('aboutbtn');
+const panel = document.getElementById('aboutcontent');
+
+btn.addEventListener('click', () => {
+    panel.classList.toggle('show');
+});
+
+document.addEventListener('click', (e) => {
+    if (!panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.classList.remove('show');
+    }
+});
+
+function morseToSpeakable(morseText) {
+    return morseText
+        .split('')
+        .map(char => {
+            if (char === '.') return 'dit';
+            if (char === '-') return 'dah';
+            if (char === '/') return 'space,';
+            else if (char === ' ') return ','; // make speech pause between letters
+            return char;
+        })
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+inputspeech.addEventListener("click", function() {
+    let inputsp = new SpeechSynthesisUtterance(inputtext.value);
+    inputsp.lang = ipl.value;
+    if (ipl.value === "mc") {
+        inputsp.lang = "en"; // set to english for morse code speaking
+        inputsp.text = morseToSpeakable(inputtext.value);
+    }
+    speechSynthesis.speak(inputsp);
+});
+
+outputspeech.addEventListener("click", function() {
+    let outputsp = new SpeechSynthesisUtterance(outputtext.value);
+    outputsp.lang = opl.value;
+    if (opl.value === "mc") {
+        outputsp.lang = "en"; // set to english for morse code speaking
+        outputsp.text = morseToSpeakable(outputtext.value);
+    }
+    speechSynthesis.speak(outputsp);
+});
+
+
+function swapLanguages() {
+    const temp = ipl.value;
+    ipl.value = opl.value;
+    opl.value = temp;   
+    const tempText = inputtext.value;
+    inputtext.value = outputtext.value;
+    outputtext.value = tempText;
+    translate();
+}
+
+function copyToClipboard() {
+    const textToCopy = outputtext.value;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        if (copyMessage) {
+            copyMessage.textContent = "Copied";
+            copyMessage.style.display = "block";
+            setTimeout(() => {
+                copyMessage.style.display = "none";
+            }, 1000);
+        }
+    }).catch(err => {
+        alert("Failed to copy text", err);
+    });
+}

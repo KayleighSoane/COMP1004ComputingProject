@@ -18,7 +18,7 @@ Basic dropdowns created - for now, doesn't need to be complicated.
 For future - will have to link translation language to dropdown selection.
 In future, could make code that if input is detected as English, automatically changes to English
 
-Basic UI created, next need to code user input within textbox that replaces existing text
+Basic UI creation done (enough to be able to start coding input and output), next need to code user input within textbox that replaces existing text
 Created text input using form & textarea. Placeholder text is displayed before user input. Will link input to js to translate the test and display is in output box.
 
 Need to make translation software before making output field else there is no output
@@ -32,3 +32,23 @@ morse translator works
 
 Changed code so dropdown values dont have to be defined in html, but in java
 - morse code logic still works
+
+Finished UI for now. Created buttons for copy, text to speech, about, GitHub link, theme selectors, but aren't coded yet
+
+coded github link
+
+want to make about button a collapsible box of text that 'overlays' the rest of the page and closes when clicked off
+
+ADDITIONAL FEATURE: TYPE TO SEARCH DROPDOWN LANGUAGES
+
+If code doesn't identify input text as selected input dropdown language, just paste input text as output text.
+
+Found an API: mymemory
+Use a url to link api. Use input text and language dropdowns as variables, api does all the work. Need to use language text that api recognises e.g - if it is es, will identify as Spanish -  CALLED ISO LANGUAGE CODE
+
+CURRENT TEXT TO SPEECH DOESNT OUTPUT OTHER LANGUAGES - need to change so if text language is French, output language is French etc
+
+To consider: make translation happen upon input, without buttons?
+- done. when changes are made to input box, calls translate function so translation updates after input.
+
+To consider: use api to translate morse code to other languages, keep my English to morse versions

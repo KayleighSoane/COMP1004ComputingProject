@@ -1,12 +1,10 @@
 body {
-    background-color: rgb(252, 252, 252);
+    background-color: white;
 }
 
-#titlehead {
+.titlehead {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    align-content: center;
     margin: auto;
     box-sizing: border-box;
     padding-left: 10px;
@@ -17,22 +15,38 @@ body {
     width: 100%;
 }
 
+.tlinks {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+
 #title {
     font-family: 'Courier New', Courier, monospace;
     letter-spacing: 2px;
+    font-size: 20px;
 }
 
 #githublink {
+    border: none;
+    border-radius: 100%;
+    padding: 0;
+    margin: 5px;
+    background-color: rgb(77, 77, 77, 0);
+    cursor: pointer;
     margin-left: auto;
-    margin-right: 5px;
-    font-size: 24px;
-    color:rgb(77, 77, 77)
+    font-size: 26px;
+    color:rgb(77, 77, 77);
 }
 
 #githublink:hover {
     transition-duration: 0.3s;
     color: black;
-    font-size: 26px;
+}
+
+#githublink:active {
+    color: rgb(70, 70, 70);
+    transition-duration: 0.1s;
 }
 
 #aboutbtn {
@@ -40,7 +54,7 @@ body {
     padding: 5px;
     background-color: rgb(200, 200, 200);
     border: none;
-    border-radius: 50%;
+    border-radius: 100%;
     font-family: Arial;
     font-weight: bold;
     cursor: pointer;
@@ -49,10 +63,36 @@ body {
 #aboutbtn:hover {
     transition-duration: 0.3s;
     background-color: rgb(170, 170, 170);
-    font-size: 14px;
 }
 
-#theme {
+#aboutbtn:active {
+    background-color: rgb(150, 150, 150);
+    transition-duration: 0.1s;
+}
+
+#aboutcontent {
+    z-index: 1;
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 30px;
+    width: 30%;
+    text-align: left;
+    background-color: rgb(224, 224, 224, 0.7);
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px grey;
+    overflow: hidden;
+    font-family: Arial;
+    font-size: 12px;
+    margin: 15px;
+    padding: 10px;
+}
+
+#aboutcontent.show {
+    display: block;
+}
+
+.theme {
     position: relative;
     float: right;
     margin-right: 10px;
@@ -60,16 +100,17 @@ body {
 }
 
 #theme-select {
-    border-radius: 50px;
-    font-size: 12px;
-    padding: 6px;
-    background-color:white;
+    border-radius: 5px;
+    border: none;
+    font-size: 10px;
+    padding: 5px;
+    background-color:rgb(236, 236, 236);
     cursor: pointer;
 }
 
-body.light-mode {
-    background-color: white;
-    color: black;
+#theme-select:hover {
+    transition-duration: 0.3s;
+    box-shadow: 1px 1px 3px rgb(186, 186, 186);
 }
 
 #input, #output { /* individual boxes */
@@ -83,12 +124,14 @@ body.light-mode {
 #input {
     border-right: 1px solid rgb(157, 157, 157);
     background-color: white;
-    border-top-left-radius: 5px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
 }
 
 #output {
     border-left: 1px solid rgb(157, 157, 157);
-    border-top-right-radius: 5px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 #textoutput, #output {
@@ -106,14 +149,14 @@ body.light-mode {
     height: 250px;
 }
 
-#display { /* total display box including translate button*/
+.display { /* total display box including translate button*/
     box-shadow: 3px 3px 5px grey;
     border: 1px solid #dadada;
     justify-content: center;
     margin: 50px auto;
     box-sizing: border-box;
     width: 80%;
-    border-radius: 5px;
+    border-radius: 12px;
 }
 
 #userinput, #textoutput { /* text areas */
@@ -122,7 +165,7 @@ body.light-mode {
     outline: none;
     font-family: Arial;
     text-align: left;
-    font-size: 16px;
+    font-size: 20px;
     margin: auto;
     overflow-wrap: break-word;
     box-sizing: border-box;
@@ -131,16 +174,8 @@ body.light-mode {
     resize: none;
 }
 
-p {
-    font-family: Arial;
-    font-weight: bold;
-    text-align: left;
-    font-size: 14px;
-    margin: 15px;
-}
-
 #ip { /* input dropdown */
-    background-color: rgb(243, 243, 243);
+    background-color: rgb(235, 235, 235);
 }
 
 #op { /* output dropdown */
@@ -155,36 +190,19 @@ p {
     position: relative;
     font-family: Arial;
     border: none;
-    font-size: 14px;
+    font-size: 12px;
     width: 100%;
     border-radius: 3px;
     cursor: pointer;
 }
 
-#ip:hover, #op:hover {
+#ip:hover, #ip:active, #op:hover, #op:active {
     transition-duration: 0.3s;
-    font-weight: bold;
-    border: 1px solid rgb(150, 150, 150);
+    box-shadow: 1px 1px 3px rgb(186, 186, 186);
 }
 
-#sub {
-    font-size: 16px;
-    width: 100%;
-    height: 30px;
-    font-family: Arial;
-    font-weight: bold;
-    background-color: rgb(224, 224, 224);
-    color: rgb(77, 77, 77);
-    border: none;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    cursor: pointer;
-}
-
-#sub:hover {
-    background-color: rgb(200, 200, 200);
-    transition-duration: 0.3s;
-    color: rgb(46, 46, 46);
+option {
+    background-color: white;
 }
 
 #opcopy, #swap {
@@ -195,11 +213,34 @@ p {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: rgb(77, 77, 77);
+    color: rgb(67, 67, 67);
 }
 
 #ipspeech:hover, #opspeech:hover, #opcopy:hover, #swap:hover {
     color: black;
     transition-duration: 0.1s;
     font-size: 15px;
+}
+
+#ipspeech:active, #opspeech:active, #opcopy:active, #swap:active {
+    transform: scale(0.99);
+    color: rgb(56, 56, 56);
+    transition-duration: 0.1s;
+}
+
+.copyset {
+    position: relative;
+}
+
+#copy-message {
+    display: none;
+    position: absolute;
+    font-family: arial;
+    top: -25px;
+    right: 0;
+    background: rgba(200, 200, 200, 0.5);
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
 }
