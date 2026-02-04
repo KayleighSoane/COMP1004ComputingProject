@@ -113,7 +113,7 @@ function morsetoenglish() {
 }
 
 function otherlang() {
-    const APIkey = "APIKEY"; // Replace with your actual Google Cloud API key
+    const APIkey = "APIKEY"; // Replace with actual API key
     const APIlink = `https://translation.googleapis.com/language/translate/v2?key=${APIkey}`;
     
     fetch(APIlink, {
