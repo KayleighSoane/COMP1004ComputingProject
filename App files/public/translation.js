@@ -112,26 +112,25 @@ function morsetoenglish() {
     }
 }
 
+
 function otherlang() {
-    const APIkey = "AIzaSyBwEPByL5_0cTW58rSvYMn4Go_qJOLBCFA"; // Replace with your actual Google Cloud API key
-    const APIlink = `https://translation.googleapis.com/language/translate/v2?key=${APIkey}`;
+    const serverURL = 'http://localhost:8080/translate'; //calls server.js translation api
     
-    fetch(APIlink, {
+    fetch(serverURL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            q: inputtext.value,
-            source: ipl.value,
-            target: opl.value,
-            format: 'text'
+            text: inputtext.value,
+            sourceLanguage: ipl.value,
+            targetLanguage: opl.value
         })
     })
     .then(response => response.json())
     .then(data => {
-        if (data.data && data.data.translations && data.data.translations.length > 0) {
-            outputtext.value = data.data.translations[0].translatedText;
+        if (data.translatedText) {
+            outputtext.value = data.translatedText;
         } else {
             outputtext.value = "Error in translation. Please try again.";
         }
