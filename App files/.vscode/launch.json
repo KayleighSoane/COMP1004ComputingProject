@@ -4,11 +4,11 @@
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}"
+            "url": "${workspaceFolder}/Public/index.htm",
+            "webRoot": "${workspaceFolder}/Public"
         },
         {
-            "type": "pwa-msedge",
+            "type": "msedge",
             "name": "Launch Microsoft Edge",
             "request": "launch",
             "runtimeArgs": [
@@ -20,7 +20,7 @@
             }
         },
         {
-            "type": "pwa-msedge",
+            "type": "msedge",
             "name": "Launch Microsoft Edge in headless mode",
             "request": "launch",
             "runtimeArgs": [

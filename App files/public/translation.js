@@ -7,6 +7,28 @@ let copyMessage;
 let translateTimeout;
 let inputspeech = document.getElementById("ipspeech");
 let outputspeech = document.getElementById("opspeech");
+let themeToggle = document.getElementById("theme-select");
+
+
+themeToggle.addEventListener("change", function() {
+    if (themeToggle.value === "dark") {
+        document.documentElement.classList.add("dark-theme");
+    } else {
+        document.documentElement.classList.remove("dark-theme");
+    }
+    //save theme preference
+    localStorage.setItem("theme", themeToggle.value);
+});
+//on page load, set theme to saved preference
+document.addEventListener("DOMContentLoaded", function() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+        themeToggle.value = savedTheme;
+        if (savedTheme === "dark") {
+            document.documentElement.classList.add("dark-theme");
+        }
+    }
+});
 
 // define dropdown languages in js not in html
 document.addEventListener("DOMContentLoaded", function() {
@@ -36,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // ipl.addEventListener("change", scheduleTranslate);
     // opl.addEventListener("change", scheduleTranslate);
     // above is code needed to get translation automatically without pressing enter
+    // but causes too many api requests, so disabled for now (can charge money to use)
 
     inputtext.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
@@ -112,9 +135,8 @@ function morsetoenglish() {
     }
 }
 
-
 function otherlang() {
-    const serverURL = 'http://localhost:8080/translate'; //calls server.js translation api
+    const serverURL = 'http://localhost:3000/translate'; //calls server.js translation api
     
     fetch(serverURL, {
         method: 'POST',
@@ -141,12 +163,12 @@ function otherlang() {
     });
 }
 
-function scheduleTranslate() { // prevents overloading api with requests on every input change
+function scheduleTranslate() { // prevents overloading api with requests on every input change when translating without pressing enter
     if (!inputtext || !ipl || !opl) {
         return;
     }
     clearTimeout(translateTimeout);
-    translateTimeout = setTimeout(translate, 300); // translates if user stops typing for 300ms
+    translateTimeout = setTimeout(translate, 1000); // translates if user stops typing for 1000ms
 }
 
 function translate() {

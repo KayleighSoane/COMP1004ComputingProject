@@ -1,5 +1,48 @@
+:root {
+    --bg: white; /* background color */
+    --conc: rgb(237, 237, 237); /* contrast color */
+    --gh: rgb(77, 77, 77); /* github icon color */
+    --gha: rgb(70, 70, 70); /* github icon active color */
+    --ab: rgb(180, 180, 180); /* about button color */
+    --abh: rgb(159, 159, 159); /* about button hover color */
+    --aba: rgb(145, 145, 145); /* about button active color */
+    --abc: rgb(224, 224, 224, 0.7); /* about content box color */
+    --sh: rgb(186, 186, 186); /* dropdown box shadows */
+    --bxb: rgb(157, 157, 157); /* border between boxes */
+    --bxs: grey; /* display box shadow */
+    --db: #dadada; /* display border */
+    --opb: rgb(245, 245, 245); /* output box background */
+    --opf: black; /* output box font color */
+    --bt: rgb(67, 67, 67); /* button color */
+    --bth: black; /* button + github hover color */
+    --bta: rgb(56, 56, 56); /* button active color */ 
+    --cm: rgb(220, 220, 220); /* copy message background */ 
+}
+
+:root.dark-theme {
+    --bg: rgb(40,40,40);
+    --conc: rgb(30,30,30);
+    --gh: rgb(200, 200, 200);
+    --gha: rgb(215, 215, 215);
+    --ab: rgb(200, 200, 200);
+    --abh: white;
+    --aba: rgb(215, 215, 215);
+    --abc: rgb(64, 64, 64, 0.7);
+    --sh: rgb(103, 103, 103);
+    --bxb: rgb(90, 90, 90);
+    --bxs: rgb(54, 54, 54);
+    --db: rgb(70, 70, 70);
+    --opf: white;
+    --opb: rgb(25, 25, 25);
+    --bt: rgb(230, 230, 230);
+    --bth: white;
+    --bta: rgb(200, 200, 200);
+    --cm: rgb(60, 60, 60);
+}
+
 body {
-    background-color: white;
+    background-color: var(--bg);
+    color: var(--bt);
 }
 
 .titlehead {
@@ -9,7 +52,7 @@ body {
     box-sizing: border-box;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: rgb(237, 237, 237);
+    background-color: var(--conc);
     border-radius: 5px;
     height: 40px;
     width: 100%;
@@ -32,27 +75,27 @@ body {
     border-radius: 100%;
     padding: 0;
     margin: 5px;
-    background-color: rgb(77, 77, 77, 0);
     cursor: pointer;
     margin-left: auto;
     font-size: 26px;
-    color:rgb(77, 77, 77);
+    color:var(--gh);
+    background: none;
 }
 
 #githublink:hover {
     transition-duration: 0.3s;
-    color: black;
+    color: var(--bth);
 }
 
 #githublink:active {
-    color: rgb(70, 70, 70);
+    color: var(--gha);
     transition-duration: 0.1s;
 }
 
 #aboutbtn {
     margin-left: auto;
     padding: 5px;
-    background-color: rgb(200, 200, 200);
+    background-color: var(--ab);
     border: none;
     border-radius: 100%;
     font-family: Arial;
@@ -62,11 +105,11 @@ body {
 
 #aboutbtn:hover {
     transition-duration: 0.3s;
-    background-color: rgb(170, 170, 170);
+    background-color: var(--abh);
 }
 
 #aboutbtn:active {
-    background-color: rgb(150, 150, 150);
+    background-color: var(--aba);
     transition-duration: 0.1s;
 }
 
@@ -78,9 +121,9 @@ body {
     right: 30px;
     width: 30%;
     text-align: left;
-    background-color: rgb(224, 224, 224, 0.7);
+    background-color: var(--abc);
     border-radius: 5px;
-    box-shadow: 3px 3px 5px grey;
+    box-shadow: 3px 3px 5px var(--sh);
     overflow: hidden;
     font-family: Arial;
     font-size: 12px;
@@ -100,17 +143,18 @@ body {
 }
 
 #theme-select {
+    color: var(--opf);
     border-radius: 5px;
     border: none;
     font-size: 10px;
     padding: 5px;
-    background-color:rgb(236, 236, 236);
+    background-color:var(--conc);
     cursor: pointer;
 }
 
 #theme-select:hover {
     transition-duration: 0.3s;
-    box-shadow: 1px 1px 3px rgb(186, 186, 186);
+    box-shadow: 1px 1px 3px var(--sh);
 }
 
 #input, #output { /* individual boxes */
@@ -122,20 +166,20 @@ body {
 }
 
 #input {
-    border-right: 1px solid rgb(157, 157, 157);
-    background-color: white;
+    border-right: 1px solid var(--bxb);
+    background-color: var(--bg);
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
 }
 
 #output {
-    border-left: 1px solid rgb(157, 157, 157);
+    border-left: 1px solid var(--bxb);
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
 }
 
 #textoutput, #output {
-    background-color: rgb(245, 245, 245);
+    background-color: var(--opb);
 }
 
 ::placeholder, #textoutput{ /* placeholder text and output text */
@@ -150,8 +194,8 @@ body {
 }
 
 .display { /* total display box including translate button*/
-    box-shadow: 3px 3px 5px grey;
-    border: 1px solid #dadada;
+    box-shadow: 3px 3px 5px var(--bxs);
+    border: 1px solid var(--db);
     justify-content: center;
     margin: 50px auto;
     box-sizing: border-box;
@@ -161,6 +205,7 @@ body {
 
 #userinput, #textoutput { /* text areas */
     align-items:center;
+    color: var(--opf);
     border: none;
     outline: none;
     font-family: Arial;
@@ -172,14 +217,15 @@ body {
     height: 75%;
     width: 100%;
     resize: none;
+    background: none;
 }
 
 #ip { /* input dropdown */
-    background-color: rgb(235, 235, 235);
+    background-color: var(--conc);
 }
 
 #op { /* output dropdown */
-    background-color: white;
+    background-color: var(--bg);
 }
 
 
@@ -190,7 +236,8 @@ body {
     position: relative;
     font-family: Arial;
     border: none;
-    font-size: 12px;
+    font-size: 14px;
+    color: var(--opf);
     width: 100%;
     border-radius: 3px;
     cursor: pointer;
@@ -198,11 +245,11 @@ body {
 
 #ip:hover, #ip:active, #op:hover, #op:active {
     transition-duration: 0.3s;
-    box-shadow: 1px 1px 3px rgb(186, 186, 186);
+    box-shadow: 1px 1px 3px var(--sh);
 }
 
 option {
-    background-color: white;
+    background-color: var(--bg);
 }
 
 #opcopy, #swap {
@@ -213,18 +260,18 @@ option {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: rgb(67, 67, 67);
+    color: var(--bt);
 }
 
 #ipspeech:hover, #opspeech:hover, #opcopy:hover, #swap:hover {
-    color: black;
+    color: var(--bth);
     transition-duration: 0.1s;
     font-size: 15px;
 }
 
 #ipspeech:active, #opspeech:active, #opcopy:active, #swap:active {
     transform: scale(0.99);
-    color: rgb(56, 56, 56);
+    color: var(--bta);
     transition-duration: 0.1s;
 }
 
@@ -238,8 +285,8 @@ option {
     font-family: arial;
     top: -25px;
     right: 0;
-    background: rgba(200, 200, 200, 0.5);
-    color: black;
+    background: var(--cm, 0.5);
+    color: var(--obf);
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 12px;
