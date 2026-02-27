@@ -1,19 +1,25 @@
 :root {
     --bg: white; /* background color */
-    --conc: rgb(237, 237, 237); /* contrast color */
+    --conc: rgb(239, 237, 227); /* contrast color */
     --gh: rgb(77, 77, 77); /* github icon color */
+    --ghh: rgb(56, 56, 56); /* github icon hover color */
     --gha: rgb(70, 70, 70); /* github icon active color */
-    --ab: rgb(180, 180, 180); /* about button color */
-    --abh: rgb(159, 159, 159); /* about button hover color */
-    --aba: rgb(145, 145, 145); /* about button active color */
-    --abc: rgb(224, 224, 224, 0.7); /* about content box color */
+    --ab: rgb(239, 237, 227); /* about button color */
+    --abh: rgb(228, 226, 218); /* about button hover color */
+    --aba: rgb(221, 219, 211); /* about button active color */
+    --abc: rgba(234, 232, 223, 0.7); /* about content box color */
     --sh: rgb(186, 186, 186); /* dropdown box shadows */
     --bxb: rgb(157, 157, 157); /* border between boxes */
     --bxs: grey; /* display box shadow */
     --db: #dadada; /* display border */
-    --opb: rgb(245, 245, 245); /* output box background */
+    --opb: rgb(239, 237, 227); /* output box background */
+    --oph: rgb(228, 226, 218); /* output box hover color */
     --opf: black; /* output box font color */
+    --op: black;
+    --opd: rgb(255, 255, 240); /* output box display color */
     --bt: rgb(67, 67, 67); /* button color */
+    --ips: rgb(56, 56, 56); /* input speech button color */
+    --ish: rgb(0, 0, 0); /* input speech button hover color */
     --bth: black; /* button + github hover color */
     --bta: rgb(56, 56, 56); /* button active color */ 
     --cm: rgb(220, 220, 220); /* copy message background */ 
@@ -21,28 +27,123 @@
 
 :root.dark-theme {
     --bg: rgb(40,40,40);
-    --conc: rgb(30,30,30);
-    --gh: rgb(200, 200, 200);
-    --gha: rgb(215, 215, 215);
-    --ab: rgb(200, 200, 200);
-    --abh: white;
-    --aba: rgb(215, 215, 215);
-    --abc: rgb(64, 64, 64, 0.7);
-    --sh: rgb(103, 103, 103);
+    --conc: rgb(247, 216, 155);
+    --gh: white;
+    --ghh: rgb(248, 198, 99);
+    --gha: rgb(247, 216, 155);
+    --ab: rgb(247, 216, 155);
+    --abh: rgb(248, 198, 99);
+    --aba: rgb(247, 216, 155);
+    --abc: rgba(247, 216, 155, 0.7);
+    --sh: rgb(118, 118, 118);
     --bxb: rgb(90, 90, 90);
     --bxs: rgb(54, 54, 54);
     --db: rgb(70, 70, 70);
-    --opf: white;
-    --opb: rgb(25, 25, 25);
+    --opf: rgb(0, 0, 0);
+    --op: white;
+    --opb: rgb(22, 20, 20);
+    --oph: rgb(82, 82, 82);
+    --opd: rgb(247, 216, 155);
     --bt: rgb(230, 230, 230);
-    --bth: white;
-    --bta: rgb(200, 200, 200);
+    --ips: rgb(82, 82, 82); /* input speech button color */
+    --ish: rgb(248, 198, 99); /* input speech button hover color */
+    --bth: rgb(248, 198, 99);
+    --bta: rgb(203, 155, 59);
     --cm: rgb(60, 60, 60);
 }
 
 body {
     background-color: var(--bg);
     color: var(--bt);
+    min-height: 100vh;
+}
+
+.theme {
+    position: relative;
+    float: right;
+    margin-top: 20px;
+    margin-right: 2.5%;
+    margin-bottom: 20px
+}
+
+#theme-select, #lang-select { /* theme and language dropdown */
+    border: black;
+    color: var(--opf);
+    display: block;
+    width: 100%;
+    border-radius: 3px;
+    font-size: clamp(10px, 1.75vh, 16px);
+    padding: 5px;
+    background-color: var(--conc);
+    cursor: pointer;
+    margin-bottom: 10px;
+    box-shadow: 1px 1px 3px var(--sh)
+}
+
+#theme-select:focus, #lang-select:focus {
+    outline: none;
+    box-shadow: 1px 1px 3px var(--sh);
+    background-color: var(--abh);
+}
+
+#theme-select:hover, #lang-select:hover, #theme-select:active, #lang-select:active {
+    transition-duration: 0.3s;
+    background-color: var(--abh);
+    box-shadow: 1px 1px 3px var(--sh);
+}
+
+#aboutbtn {
+    margin: 10px;
+    margin-left: 2.5%;
+    margin-top: 20px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--ab);
+    border: none;
+    border-radius: 5px;
+    font-family: Arial;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: clamp(12px, 2.2vh, 2.5vh);
+    box-shadow: 1px 1px 3px var(--sh)
+}
+
+#aboutbtn:focus {
+    outline: none;
+    background-color: var(--abh);
+    box-shadow: 1px 1px 3px var(--sh);
+}
+
+#aboutbtn:hover {
+    transition-duration: 0.3s;
+    background-color: var(--abh);
+    box-shadow: 1px 1px 3px var(--sh);
+}
+
+#aboutbtn:active {
+    background-color: var(--aba);
+    transition-duration: 0.1s;
+}
+
+#aboutcontent {
+    display: none;
+    text-align: left;
+    background-color: var(--abc);
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px var(--sh);
+    overflow: hidden;
+    font-family: Arial;
+    font-size: clamp(12px, 3vh, 14px);
+    
+}
+
+#aboutcontent.show {
+    display: inline-block;
+    position: absolute;
+    width: 50%;
+    margin-top: 20px;
+    padding: 10px;
 }
 
 .titlehead {
@@ -52,10 +153,10 @@ body {
     box-sizing: border-box;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: var(--conc);
-    border-radius: 5px;
-    height: 40px;
-    width: 100%;
+    background-color: none;
+    border: 1px solid var(--db);
+    height: 50px;
+    width: 95%;
 }
 
 .tlinks {
@@ -82,79 +183,35 @@ body {
     background: none;
 }
 
+#githublink:focus {
+    outline: none;
+}
+
 #githublink:hover {
     transition-duration: 0.3s;
-    color: var(--bth);
+    color: var(--ghh);
 }
 
 #githublink:active {
-    color: var(--gha);
+    color: var(--ghh);
     transition-duration: 0.1s;
 }
 
-#aboutbtn {
-    margin-left: auto;
-    padding: 5px;
-    background-color: var(--ab);
-    border: none;
-    border-radius: 100%;
-    font-family: Arial;
-    font-weight: bold;
-    cursor: pointer;
+.display { /* total display box including translate button*/
+    box-shadow: 3px 3px 5px var(--bxs);
+    background-color: var(--opb);
+    border: 1px solid var(--opb);
+    justify-content: center;
+    margin: auto;
+    margin-top: 30px;
+    box-sizing: border-box;
+    width: 90%;
+    border-radius: 30px;
 }
 
-#aboutbtn:hover {
-    transition-duration: 0.3s;
-    background-color: var(--abh);
-}
-
-#aboutbtn:active {
-    background-color: var(--aba);
-    transition-duration: 0.1s;
-}
-
-#aboutcontent {
-    z-index: 1;
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 30px;
-    width: 30%;
-    text-align: left;
-    background-color: var(--abc);
-    border-radius: 5px;
-    box-shadow: 3px 3px 5px var(--sh);
-    overflow: hidden;
-    font-family: Arial;
-    font-size: 12px;
-    margin: 15px;
-    padding: 10px;
-}
-
-#aboutcontent.show {
-    display: block;
-}
-
-.theme {
-    position: relative;
-    float: right;
-    margin-right: 10px;
-    margin-top: 10px;
-}
-
-#theme-select {
-    color: var(--opf);
-    border-radius: 5px;
-    border: none;
-    font-size: 10px;
-    padding: 5px;
-    background-color:var(--conc);
-    cursor: pointer;
-}
-
-#theme-select:hover {
-    transition-duration: 0.3s;
-    box-shadow: 1px 1px 3px var(--sh);
+.textboxes {  /* surrounds both boxes */
+    display: flex;
+    justify-content: center;
 }
 
 #input, #output { /* individual boxes */
@@ -163,113 +220,189 @@ body {
     text-align: left;
     box-sizing: border-box;
     padding: 5px;
-}
-
-#input {
-    border-right: 1px solid var(--bxb);
-    background-color: var(--bg);
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
+    margin: 20px;
+    background-color: white;
+    border-radius: 30px;
+    padding-bottom: 13px;
 }
 
 #output {
-    border-left: 1px solid var(--bxb);
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-}
-
-#textoutput, #output {
-    background-color: var(--opb);
+    background: none;
 }
 
 ::placeholder, #textoutput{ /* placeholder text and output text */
     font-weight: bold;
 }
 
-.textboxes {  /* surrounds both boxes */
-    display: flex;
-    justify-content: center;
-    margin: auto;
-    height: 250px;
-}
-
-.display { /* total display box including translate button*/
-    box-shadow: 3px 3px 5px var(--bxs);
-    border: 1px solid var(--db);
-    justify-content: center;
-    margin: 50px auto;
-    box-sizing: border-box;
-    width: 80%;
-    border-radius: 12px;
-}
-
 #userinput, #textoutput { /* text areas */
-    align-items:center;
-    color: var(--opf);
-    border: none;
+    align-items: center;
     outline: none;
     font-family: Arial;
     text-align: left;
-    font-size: 20px;
+    font-size: clamp(16px, 4vh, 4vh);
     margin: auto;
+    padding: 10px;
     overflow-wrap: break-word;
     box-sizing: border-box;
-    height: 75%;
+    height: 40vh;
     width: 100%;
     resize: none;
+    border: none;
     background: none;
 }
 
+#textoutput {
+    cursor: default;
+    color: var(--op);
+}
+
+#dropdowns { /* container for dropdown menus */
+    display: flex;
+    border: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    padding-bottom: 0;
+    margin: auto;
+}
+
+.ipdown, .opdown { /* dropdown containers */
+    display: flex;
+    width: 50%;
+}
+
+.ipdown {
+    border-top-left-radius: 5px;
+    padding-left: 5px;
+}
+
+.opdown {
+    border-top-right-radius: 5px;
+    padding-right: 5px;
+}
+
 #ip { /* input dropdown */
-    background-color: var(--conc);
+    background-color: white;
+    width: 100%;
+    border-top-left-radius: 5px;
 }
 
 #op { /* output dropdown */
-    background-color: var(--bg);
+    background: var(--opd);
+    width: 100%;
+    border-top-right-radius: 5px;
 }
 
-
 #ip, #op { /* both dropdown menus */
-    float: right;
-    padding: 5px;
-    overflow: auto;
     position: relative;
     font-family: Arial;
     border: none;
-    font-size: 14px;
+    border-radius: 30px;
+    font-size: clamp(12px, 2.5vh, 2.5vh);
     color: var(--opf);
-    width: 100%;
-    border-radius: 3px;
     cursor: pointer;
+    padding-left: 10px;
+    margin: 5px;
+    box-shadow: 1px 1px 3px var(--sh);
 }
 
-#ip:hover, #ip:active, #op:hover, #op:active {
+select option {
+    background-color: var(--bg);
+}
+
+#ip:focus, #op:focus {
+    box-shadow: 2px 2px 5px var(--sh);
+    outline: none;
+}
+
+#ip:hover, #ip:active {
+    background-color: var(--abh);
     transition-duration: 0.3s;
     box-shadow: 1px 1px 3px var(--sh);
 }
 
-option {
-    background-color: var(--bg);
+#op:hover, #op:active {
+    background-color: var(--abh);
+    transition-duration: 0.3s;
+    box-shadow: 1px 1px 3px var(--sh);
 }
 
-#opcopy, #swap {
+#swap {
+    position: relative;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    margin: 2px;
+    font-family: Arial;
+    font-size: clamp(12px, 2.5vh, 2.5vh);
+    color: var(--bt);
+    cursor: pointer;
+}
+
+#swap:hover {
+    color: var(--ghh);
+    transition-duration: 0.3s;
+}
+
+#swap:focus {
+    outline: none;
+}
+
+#swap:active {
+    color: var(--ghh);
+    rotate: 180deg;
+}
+
+select option {
+    background-color: var(--opd);
+}
+
+select option:hover {
+    background-color: var(--opd);
+}
+
+select option:focus {
+    background-color: var(--opd);
+}
+
+select:active {
+    background-color: var(--opd);
+}
+
+#opcopy {
     float: right;
 }
 
-#ipspeech, #opspeech, #opcopy, #swap { 
+#ipspeech, #opspeech, #opcopy { 
     background-color: transparent;
     border: none;
     cursor: pointer;
     color: var(--bt);
+    font-size: clamp(12px, 3vh, 3vh);
+    margin-top: 5px;
 }
 
-#ipspeech:hover, #opspeech:hover, #opcopy:hover, #swap:hover {
+#ipspeech {
+    color: var(--ips);
+    padding-left: 10px;
+}
+
+#ipspeech:focus, #opspeech:focus, #opcopy:focus {
+    outline: none;
+    color: var(--bth);
+}
+
+#ipspeech:hover, #opspeech:hover, #opcopy:hover {
     color: var(--bth);
     transition-duration: 0.1s;
-    font-size: 15px;
 }
 
-#ipspeech:active, #opspeech:active, #opcopy:active, #swap:active {
+#ipspeech:hover {
+    color: var(--ish);
+}
+
+#ipspeech:active, #opspeech:active, #opcopy:active {
     transform: scale(0.99);
     color: var(--bta);
     transition-duration: 0.1s;
@@ -282,6 +415,7 @@ option {
 #copy-message {
     display: none;
     position: absolute;
+    font-size: clamp(12px, 3vh, 16px);
     font-family: arial;
     top: -25px;
     right: 0;
@@ -289,5 +423,10 @@ option {
     color: var(--obf);
     padding: 5px 10px;
     border-radius: 5px;
-    font-size: 12px;
+}
+
+@keyframes active {
+    0% {transform: scale(1);}
+    50% {transform: scale(0.95);}
+    100% {transform: scale(1);}
 }
