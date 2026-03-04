@@ -1,2 +1,4 @@
-App files/key.env
-App files/.env
+node_modules/
+.DS_Store
+*.log
+.vscode/
