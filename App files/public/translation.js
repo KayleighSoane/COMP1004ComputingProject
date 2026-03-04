@@ -68,6 +68,9 @@ async function translateElements(elements, language) {
     }
 }
 
+const titles = document.querySelectorAll("title")
+const placeholders = document.querySelectorAll("placeholder")
+const copymessage = 
 langToggle.addEventListener("DOMContentLoaded" || "change", function(event) {
     const elementsToTranslate = [];
     elementsToTranslate += document.querySelectorAll("title" && "placeholder" && "label" && "options" && "aboutmessage");
@@ -107,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function() {
     outputtext = document.getElementById("textoutput");
     ipl = document.getElementById("ip"); // select element itself
     opl = document.getElementById("op"); // select element itself
-    copyMessage = document.getElementById("copy-message");
 
     // inputtext.addEventListener("input", translate, scheduleTranslate);
     // ipl.addEventListener("change", scheduleTranslate);
@@ -358,6 +360,7 @@ function swapLanguages() {
     translate();
 }
 
+copyMessage = document.getElementById("copy-message");
 function copyToClipboard() {
     const textToCopy = outputtext.value;
     navigator.clipboard.writeText(textToCopy).then(() => {

@@ -72,7 +72,7 @@ body {
     display: block;
     width: 100%;
     border-radius: 3px;
-    font-size: clamp(11px, calc(0.8vw + 0.8h), 16px);
+    font-size: clamp(12px, calc(0.8vw + 0.8vh), 16px);
     padding: 5px;
     background-color: var(--conc);
     cursor: pointer;
@@ -96,10 +96,14 @@ body {
     float: left;
     font-family: 'courier new', courier, monospace;
     font-weight: bold;
-    font-size: clamp(16px, calc(1vw + 1vh), 22px);
+    font-size: clamp(18px, calc(1.25vw + 1.25vh), 22px);
     margin-left: 2.5%;
     margin-top: 20px;
     cursor: pointer;
+}
+
+#navopen:hover  {
+    color: var(--bth);
 }
 
 #sidenav {
@@ -148,6 +152,23 @@ body {
     padding: 0px 20px;
     color: var(--bt);
     padding-bottom: 10px;
+}
+
+#historytable {
+    border-collapse: collapse;
+    display: flex;
+    border: 3px solid black;
+    width: auto;
+}
+
+td {
+    padding: 10px, auto;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+tr {
+    margin: 10px;
 }
 
 .titlehead {
@@ -243,7 +264,7 @@ body {
     outline: none;
     font-family: Arial;
     text-align: left;
-    font-size: clamp(16px, calc(2vh + 2vw), 4vh);
+    font-size: clamp(16px, calc(1.5vh + 1.5vw), 3vh);
     margin: auto;
     padding: 10px;
     overflow-wrap: break-word;
@@ -290,7 +311,7 @@ body {
     font-family: Arial;
     border: none;
     border-radius: 30px;
-    font-size: clamp(12px, calc(1.25vw + 1.25vh), 2.5vh);
+    font-size: clamp(14px, calc(1vw + 1vh), 2vh);
     color: var(--opf);
     cursor: pointer;
     padding-left: 10px;
@@ -337,7 +358,7 @@ select option {
     padding: 10px;
     margin: 2px;
     font-family: Arial;
-    font-size: clamp(12px, calc(1.25vw + 1.25vh), 2.5vh);
+    font-size: clamp(14px, calc(1vw + 1vh), 2.5vh);
     color: var(--bt);
     cursor: pointer;
 }
@@ -381,7 +402,7 @@ select:active {
     border: none;
     cursor: pointer;
     color: var(--bt);
-    font-size: clamp(12px, calc(1.5vw + 1.5vh), 3vh);
+    font-size: clamp(14px, calc(1vw + 1vh), 2.5vh);
     margin-top: 5px;
 }
 
@@ -417,7 +438,7 @@ select:active {
 #copy-message {
     display: none;
     position: absolute;
-    font-size: clamp(12px, calc(1.5vw + 1.5vh), 16px);
+    font-size: clamp(14px, calc(1.5vw + 1.5vh), 2vh);
     font-family: arial;
     top: -25px;
     right: 0;
