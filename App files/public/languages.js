@@ -27,7 +27,6 @@ const language = { // language options for dropdowns - Google Translate API lang
     "ko": "Korean",
     "ms": "Malay",
     "mr": "Marathi",
-    "no": "Norwegian",
     "fa": "Persian",
     "pl": "Polish",
     "pt": "Portuguese",

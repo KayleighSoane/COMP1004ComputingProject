@@ -4,10 +4,16 @@ let ipl;
 let opl;
 let lower;
 let copyMessage;
-let translateTimeout;
+let apiKey;
+let apiKeyFetched;
+let preferredEnglishVoiceM = "Microsoft Hazel Desktop - English (Great Britain)"; // microsoft browser
+let preferredEngishvoiceG = "Google UK English Female"; // google browser
+let availableVoices = [];
+let voicesReady;
 let inputspeech = document.getElementById("ipspeech");
 let outputspeech = document.getElementById("opspeech");
 let themeToggle = document.getElementById("theme-select");
+let langToggle = document.getElementById("lang-select");
 
 
 themeToggle.addEventListener("change", function() {
@@ -19,6 +25,7 @@ themeToggle.addEventListener("change", function() {
     //save theme preference
     localStorage.setItem("theme", themeToggle.value);
 });
+
 //on page load, set theme to saved preference
 document.addEventListener("DOMContentLoaded", function() {
     const savedTheme = localStorage.getItem("theme");
@@ -27,6 +34,54 @@ document.addEventListener("DOMContentLoaded", function() {
         if (savedTheme === "dark") {
             document.documentElement.classList.add("dark-theme");
         }
+    }
+});
+
+//ability to change site language to different languages
+// call google api to translate elements
+// When language selected, send all element text through translation function and update elements with translated text
+// q is text, target is language to translate to, source is language to translate from (can be auto detected)
+
+async function translateElements(elements, language) {
+    const key = await fetchAPI();
+    if (!key) {
+        console.error("API key is missing");
+        return;
+    }
+    try {
+        const url = `https://translation.googleapis.com/language/translate/v2?key=${key}`;
+        const headers = {"Content-Type": "application/json"};
+        const payload = {
+            q: elements,
+            target: language,
+            format: "text"
+        };
+        const response = await fetch(url, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        // Process the translation results
+    } catch (error) {
+        console.error("Error translating elements:", error);
+    }
+}
+
+langToggle.addEventListener("DOMContentLoaded" || "change", function(event) {
+    const elementsToTranslate = [];
+    elementsToTranslate += document.querySelectorAll("title" && "placeholder" && "label" && "options" && "aboutmessage");
+
+    translateElements(elementsToTranslate, langToggle.value);
+
+    localStorage.setItem("language", langToggle.value); // doesnt save dropdown selection because 
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const savedLanguage = localStorage.getItem("language");
+    if (savedLanguage) {
+        langToggle.value = savedLanguage;
+        // call function to translate site to saved language
     }
 });
 
@@ -57,8 +112,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // inputtext.addEventListener("input", translate, scheduleTranslate);
     // ipl.addEventListener("change", scheduleTranslate);
     // opl.addEventListener("change", scheduleTranslate);
-    // above is code needed to get translation automatically without pressing enter
-    // but causes too many api requests, so disabled for now (can charge money to use)
+        // above is code needed to get translation automatically without pressing enter
+        // but causes too many api requests, so disabled for now (can charge money to use)
 
     inputtext.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
@@ -135,40 +190,59 @@ function morsetoenglish() {
     }
 }
 
-function otherlang() {
-    const serverURL = 'http://localhost:3000/translate'; //calls server.js translation api
-    
-    fetch(serverURL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            text: inputtext.value,
-            sourceLanguage: ipl.value,
-            targetLanguage: opl.value
+async function fetchAPI() {
+    if (apiKey) return apiKey; // if it already exists, return it without fetching again
+    if (!apiKeyFetched) { // if not, fetch it
+        apiKeyFetched = fetch("apikey.txt")
+        .then(response => {
+            if (!response.ok) { throw new Error(`HTTP error status: ${response.status}`); }
+            return response.text();
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.translatedText) {
-            outputtext.value = data.translatedText;
-        } else {
-            outputtext.value = "Error in translation. Please try again.";
-        }
-    })
-    .catch(error => {
-        console.error('Translation error:', error); //write to console for debugging
-        outputtext.value = "Error in translation. Please try again.";
-    });
+        .then(key => {
+            apiKey = key.trim();
+            return apiKey;
+        })
+        .catch(error => {
+            console.error("Error fetching API key:", error);
+            return "";
+        });
+    }
+    return apiKeyFetched;
 }
 
-function scheduleTranslate() { // prevents overloading api with requests on every input change when translating without pressing enter
-    if (!inputtext || !ipl || !opl) {
+async function otherlang() { // not using server, save API locally
+    outputtext.value = "";
+    const key = await fetchAPI();
+    if (!key) {
+        outputtext.value = "API key not found.";
+        console.error("API key is missing");
         return;
     }
-    clearTimeout(translateTimeout);
-    translateTimeout = setTimeout(translate, 1000); // translates if user stops typing for 1000ms
+    try {
+        const url = `https://translation.googleapis.com/language/translate/v2?key=${key}`;
+        const headers = {"Content-Type": "application/json"};
+        const payload = {
+            q: inputtext.value,
+            source: ipl.value,
+            target: opl.value,            
+            format: "text"
+        };
+        const response = await fetch(url, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(payload)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error status: ${response.status}`);
+        }
+        const data = await response.json();
+        const translatedText = data?.data?.translations?.[0]?.translatedText;
+        if (!translatedText) throw new Error("Invalid API response structure");
+        outputtext.value = translatedText;
+    } catch (error) {
+        console.error("Translation error:", error);
+        outputtext.value = "Translation failed. Please check console for error.";
+    }
 }
 
 function translate() {
@@ -191,22 +265,32 @@ function translate() {
     }
 };
 
-
-const btn = document.getElementById('aboutbtn');
-const panel = document.getElementById('aboutcontent');
-
-btn.addEventListener('click', () => {
-    panel.classList.toggle('show');
-});
-
-document.addEventListener('click', (e) => {
-    if (!panel.contains(e.target) && !btn.contains(e.target)) {
-        panel.classList.remove('show');
+// change speech to text english or morse voice to specific browser voices
+// if dropdown language is english, set voice to chosen speakers
+// if not available, use default voice
+document.addEventListener("DOMContentLoaded", function() { // load voices on page load
+    availableVoices = speechSynthesis.getVoices();
+    if (availableVoices.length > 0) {
+        voicesReady = true;
+    } else {
+        speechSynthesis.addEventListener("voiceschanged", function() {
+            availableVoices = speechSynthesis.getVoices();
+            voicesReady = true;
+        });
     }
-});
+});    
+
+function getEnglishVoice() {
+    const voices = availableVoices
+    return voices.find(v => v.name === preferredEnglishVoiceM) 
+    || voices.find(v => v.name === preferredEngishvoiceG)
+    || voices.find(v => v.lang.startsWith("en-GB")) // fallback
+    || voices.find(v => v.lang.startsWith("en")) // fallback to any english voice
+    || null;
+}   
 
 function morseToSpeakable(morseText) {
-    return morseText
+    return morseText 
         .split('')
         .map(char => {
             if (char === '.') return 'dit';
@@ -220,26 +304,49 @@ function morseToSpeakable(morseText) {
         .trim();
 }
 
-inputspeech.addEventListener("click", function() {
+function inputSpeech() {
     let inputsp = new SpeechSynthesisUtterance(inputtext.value);
     inputsp.lang = ipl.value;
     if (ipl.value === "mc") {
+        const morseVoice = getEnglishVoice();
+        if (morseVoice) {
+            inputsp.voice = morseVoice;
+        }
         inputsp.lang = "en"; // set to english for morse code speaking
         inputsp.text = morseToSpeakable(inputtext.value);
     }
-    speechSynthesis.speak(inputsp);
-});
+    if (inputsp.lang === "en") {
+        const englishVoice = getEnglishVoice(); 
+        if (englishVoice) {
+            inputsp.voice = englishVoice;
+        }
+    }
+    if(!voicesReady) loadVoices();
+    if (speechSynthesis.speaking) speechSynthesis.cancel(); // stop current speech if still speaking
+    else speechSynthesis.speak(inputsp);
+};
 
-outputspeech.addEventListener("click", function() {
+function outputSpeech() {
     let outputsp = new SpeechSynthesisUtterance(outputtext.value);
     outputsp.lang = opl.value;
     if (opl.value === "mc") {
+        const morseVoice = getEnglishVoice();
+        if (morseVoice) {
+        outputsp.voice = morseVoice;
+        }
         outputsp.lang = "en"; // set to english for morse code speaking
         outputsp.text = morseToSpeakable(outputtext.value);
     }
-    speechSynthesis.speak(outputsp);
-});
-
+    if (opl.value === "en") {
+    const englishVoice = getEnglishVoice(); 
+        if (englishVoice) {
+            outputsp.voice = englishVoice;
+        }
+    }
+    if (!voicesReady) loadVoices();
+    if (speechSynthesis.speaking) speechSynthesis.cancel(); // stop current speech if still speaking
+    else speechSynthesis.speak(outputsp);
+};
 
 function swapLanguages() {
     const temp = ipl.value;
@@ -264,4 +371,41 @@ function copyToClipboard() {
     }).catch(err => {
         alert("Failed to copy text", err);
     });
+}
+
+// create history of recent translations, store in local storage, show in expandable menu, click to re-translate that text
+// once clicked, hide nav menu
+// add section next to translation box if browser is full screen
+// Could make side navigation tab - can put about info inside it as well as history
+
+function openNav() {
+    document.getElementById("sidenav").style.width = "35vw";
+}
+
+function closeNav() {
+    if (newabout.style.display === "block") {
+        newabout.style.display = "none"; // also close about message if open
+    }
+    document.getElementById("sidenav").style.width = "0px";
+}
+
+const newabout = document.getElementById("newaboutmessage");
+
+document.addEventListener("click", (e) => {
+    const sidenav = document.getElementById("sidenav");
+    const navopen = document.getElementById("navopen");
+    
+    if (!sidenav.contains(e.target) && e.target !== navopen) {
+        closeNav(); // if not click within sidenav, close
+        if (newabout.style.display === "block") {
+            newabout.style.display = "none"; // also close about message if open
+        }
+    }
+});
+
+function showabout() {
+    if (newabout.style.display === "block") {
+        newabout.style.display = "none";
+        return;
+    } else newabout.style.display = "block";
 }
