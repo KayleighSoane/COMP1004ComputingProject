@@ -24,7 +24,7 @@
 
     <body>
         
-        <div class="theme">
+        <div data-trans="lang" class="theme">
             <select id="theme-select" title="Colour Theme">
                 <option value="light" selected>Light</option>
                 <option value="dark">Dark</option>
@@ -40,24 +40,18 @@
 
         </div>
 
-        <div id="sidenav">
-            <a class="closebtn" onclick="closeNav()"><i class="fa-solid fa-x"></i></a>
-            <a id="newabout" onclick="showabout()">About ^</a>
-                <p id="newaboutmessage">Morse code is only compatible with English.<br>Use theme selector to change to colorblind modes.</p>
-            <a class="historybtn">History</a>
-                <table id="historytable">
-                    <tr>
-                       <td>English</td>
-                        <td>Hello!</td> 
-                    </tr>
-                    <tr>
-                        <td>French</td>
-                        <td>Bonjour!</td>
-                    </tr>
-                    
-                </table>
+        <div data-trans="lang" id="sidenav">
+            <a id="closebtn" title="Close" onclick="closeNav()"><i class="fa-solid fa-x"></i></a>
+            
+            <a title="About" id="newabout" onclick="showabout()">About <i id="about-icon" class="fa-solid fa-angle-down"></i></a>
+            <p title="About Wordio" id="newaboutmessage">Morse code is only compatible with English.<br>Select Auto to detect input language automatically.<br>Click on history items to retranslate the output text.</p>
+            
+            <a title="History" id="history">History</a>
+            <ul title="Translation History" id="historylist"></ul>
+
+            <button id="clearhistory" title="Clear History" onclick="clearHistory()">Clear History</button>
         </div>        
-        <span id="navopen" onclick="openNav()"><i class="fa-solid fa-bars"></i> About + History</span>
+        <span id="navopen" title="About + History (Alt+H)" onclick="openNav()"><i class="fa-solid fa-bars"></i> About + History</span>
         
         <div class="titlehead">
             <div id="title">
@@ -73,14 +67,16 @@
         </div>
         
         
-        <div class="display">
+        <div data-trans="lang" class="display">
             
             <div id="dropdowns">
                 <div class="ipdown">
-                    <select class="ttext" title="Input language" id="ip"></select>
+                    <select class="ttext" title="Input language" id="ip">
+                        <option value="" selected>Auto</option> <!-- auto added only to input -->
+                    </select>
                 </div>
                 
-                <button id="swap" title="Swap" onclick="swapLanguages()"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
+                <button id="swap" title="Swap (Alt+S)" onclick="swapLanguages()"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
                 
                 <div class="opdown">
                     <select class="ttext" title="Output language" id="op"></select> <!-- coded in translation.js -->
@@ -89,9 +85,10 @@
             
             <div class="textboxes">
                 <div id="input">
-                    <textarea maxlength="5000" id="userinput" autocomplete="on" placeholder ="Enter text..." title="Text input"></textarea>
+                    <textarea maxlength="500" id="userinput" autocomplete="on" placeholder ="Enter text..." title="Text input"></textarea>
                     
                     <button id="ipspeech" title="Speak" onclick="inputSpeech()"><i class="fa-solid fa-microphone"></i></button>
+                    <p id="counter"><span id="charcount">0</span>/500</p>
                 </div>
                 
                 <div id="output">
@@ -99,11 +96,15 @@
                     
                     <div class="copyset">
                         <button id="opspeech" title="Speak" onclick="outputSpeech()"><i class="fa-solid fa-microphone"></i></button>
-                        <button id="opcopy" title="Copy" onclick="copyToClipboard()"><i class="fa-solid fa-copy"></i></button>
+                        <button id="opcopy" title="Copy (Alt+C)" onclick="copyToClipboard()"><i class="fa-solid fa-copy"></i></button>
                         <div id="copy-message" aria-live="polite">Copied to Clipboard</div>    
                     </div>
                 </div>
                 
+            </div>
+
+            <div id="translate-container">
+            <button id="translate" title="Translate (Ctrl+Enter)">Translate</button>
             </div>
 
         </div>

@@ -41,72 +41,33 @@ document.addEventListener("DOMContentLoaded", function() {
 // call google api to translate elements
 // When language selected, send all element text through translation function and update elements with translated text
 // q is text, target is language to translate to, source is language to translate from (can be auto detected)
+// needs to read option value attribute for iso language code
 
-async function translateElements(elements, language) {
-    const key = await fetchAPI();
-    if (!key) {
-        console.error("API key is missing");
-        return;
-    }
-    try {
-        const url = `https://translation.googleapis.com/language/translate/v2?key=${key}`;
-        const headers = {"Content-Type": "application/json"};
-        const payload = {
-            q: elements,
-            target: language,
-            format: "text"
-        };
-        const response = await fetch(url, {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify(payload)
-        });
-        const data = await response.json();
-        // Process the translation results
-    } catch (error) {
-        console.error("Error translating elements:", error);
-    }
-}
+// how to get all UI text elements? add class and extract text from classes, then update inner text with translated text from api
+// adding extra class to divs affects css - use data instead of class
 
-const titles = document.querySelectorAll("title")
-const placeholders = document.querySelectorAll("placeholder")
-const copymessage = 
-langToggle.addEventListener("DOMContentLoaded" || "change", function(event) {
-    const elementsToTranslate = [];
-    elementsToTranslate += document.querySelectorAll("title" && "placeholder" && "label" && "options" && "aboutmessage");
 
-    translateElements(elementsToTranslate, langToggle.value);
 
-    localStorage.setItem("language", langToggle.value); // doesnt save dropdown selection because 
-});
 
-document.addEventListener("DOMContentLoaded", function() {
-    const savedLanguage = localStorage.getItem("language");
-    if (savedLanguage) {
-        langToggle.value = savedLanguage;
-        // call function to translate site to saved language
-    }
-});
-
-// define dropdown languages in js not in html
+// define translation dropdown languages in js not in html
 document.addEventListener("DOMContentLoaded", function() {
     const lang = document.querySelectorAll(".ttext"); // all select elements with class 'text'
 
     lang.forEach((get, con) => {
         for (let country in language) {
             let initial = "";
-            if (con === 0 && country === "en") {
+            if (con === 0 && country === "") { // set as default input
                 initial = "selected";
-            } else if (con === 1 && country === "mc") {
+            } else if (con === 1 && country === "en") { // set as default output
                 initial = "selected";
             }
 
-            const option = `<option value="${country}" ${initial}>${language[country]}</option>`;
+            const option = `<option value="${country}" ${initial}>${language[country]}</option>`; // create option element for each language
             get.insertAdjacentHTML("beforeend", option);
         }
     });
 
-    inputtext = document.getElementById("userinput"); //access to text input area
+    inputtext = document.getElementById("userinput");
     outputtext = document.getElementById("textoutput");
     ipl = document.getElementById("ip"); // select element itself
     opl = document.getElementById("op"); // select element itself
@@ -115,22 +76,36 @@ document.addEventListener("DOMContentLoaded", function() {
     // ipl.addEventListener("change", scheduleTranslate);
     // opl.addEventListener("change", scheduleTranslate);
         // above is code needed to get translation automatically without pressing enter
-        // but causes too many api requests, so disabled for now (can charge money to use)
+        // but causes too many api requests, so disabled for now (can charge money if too many calls)
 
     inputtext.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
+        if (event.ctrlKey && event.key === "Enter") {
             translate();
         }
     });
     ipl.addEventListener("change", translate);
     opl.addEventListener("change", translate); // auto changes when languages change
 
+    const transbutton = document.getElementById("translate");
+    transbutton.addEventListener("click", translate);
+
+    renderHistory(); // render history on page load
+
+    const charcount = document.getElementById("charcount");
+    inputtext.addEventListener("input", function() {
+        const length = inputtext.value.length;
+        charcount.textContent = length;
+        if (length >= 500) {
+            charcount.style.color = "red";
+        } else {
+            charcount.style.color = "";
+        }
+    });
 });
 
-//add so if input is english, select english dropdown
-// if input is detected as morse, auto select morse dropdown
 
-// can change the input to all lowercase and then convert to morse code
+// Morse code implementation
+
 const morse = [
     // a-z
     '.-', '-...', '-.-.', '-..', '.', '..-.',
@@ -141,7 +116,7 @@ const morse = [
     '-----', '.----', '..---', '...--', '....-', '.....',
     '-....', '--...', '---..', '----.',
     // .,!?'"-:;"
-    '.-.-.-', '--..--', '-.-.--', '..--..', '.----.', '.-..-.', '-....-', '---...', '-.-.-.',
+    '.-.-.-', '--..--', '-.-.--', '..--..', '.----.', '.-..-.', '-....-', '---...', '-.-.-.', '-..-.'
 ];
 
 const alphabet = [  
@@ -154,7 +129,7 @@ const alphabet = [
     '0', '1', '2', '3', '4', '5',
     '6', '7', '8', '9'
     // .,!?'"-:;"
-    , '.', ',', '!', '?', '\'', '"', '-', ':', ';',
+    , '.', ',', '!', '?', '\'', '"', '-', ':', ';', '/'
 ];
 
 function lowercase() {
@@ -192,6 +167,9 @@ function morsetoenglish() {
     }
 }
 
+
+// API and language translation implementation
+
 async function fetchAPI() {
     if (apiKey) return apiKey; // if it already exists, return it without fetching again
     if (!apiKeyFetched) { // if not, fetch it
@@ -212,7 +190,7 @@ async function fetchAPI() {
     return apiKeyFetched;
 }
 
-async function otherlang() { // not using server, save API locally
+async function otherlang() { // all translation not morse code
     outputtext.value = "";
     const key = await fetchAPI();
     if (!key) {
@@ -230,7 +208,7 @@ async function otherlang() { // not using server, save API locally
             format: "text"
         };
         const response = await fetch(url, {
-            method: "POST",
+            method: "POST", // post means sending data to api and also getting response back
             headers: headers,
             body: JSON.stringify(payload)
         });
@@ -241,31 +219,38 @@ async function otherlang() { // not using server, save API locally
         const translatedText = data?.data?.translations?.[0]?.translatedText;
         if (!translatedText) throw new Error("Invalid API response structure");
         outputtext.value = translatedText;
+        addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after async translation
     } catch (error) {
         console.error("Translation error:", error);
         outputtext.value = "Translation failed. Please check console for error.";
     }
 }
 
-function translate() {
+function translate() { // main function called that processess all inputs
     outputtext.value = ""; //clear output box before new output
+    inputtext.value = inputtext.value.trim(); // remove extra spaces from input to avoid translation issues and false morse code detection
     if (ipl.value === opl.value) {
-        outputtext.value = inputtext.value; //if both are the same, just copy input to output
+        outputtext.value = inputtext.value; //if both are the same language, just copy input to output
     }
-    else if (inputtext.value === "") { // if no input, clear output
+    else if (inputtext.value === "") {
         outputtext.value = ""; //if input is empty, clear output, dont call translation
     }
     else if (ipl.value === "en" && opl.value === "mc") {
         englishtomorse();
+        addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after translation
     } 
     else if (ipl.value === "mc" && opl.value === "en") { // morse code only works to english
-        morsetoenglish();
+        morsetoenglish();Z
+        addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after translation
     } else if (ipl.value == "mc" || opl.value === "mc") { // can api translate morse? could use my version for english, and api for others
-        outputtext.value = "Morse Code translation only works to and from English.";
+        outputtext.value = "Morse Code translation does not work with this language.";
     } else {
-        otherlang();
+        otherlang(); // history added inside otherlang function since it is async
     }
 };
+
+
+// Text to speech implementation
 
 // change speech to text english or morse voice to specific browser voices
 // if dropdown language is english, set voice to chosen speakers
@@ -275,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function() { // load voices on pag
     if (availableVoices.length > 0) {
         voicesReady = true;
     } else {
-        speechSynthesis.addEventListener("voiceschanged", function() {
+        speechSynthesis.addEventListener("voiceschanged", function() { // some browsers load voices asynchronously, so listen for event
             availableVoices = speechSynthesis.getVoices();
             voicesReady = true;
         });
@@ -295,7 +280,7 @@ function morseToSpeakable(morseText) {
     return morseText 
         .split('')
         .map(char => {
-            if (char === '.') return 'dit';
+            if (char === '.') return 'dit'; // di and dah makes it flow better when spoken, and more recognizable as morse code
             if (char === '-') return 'dah';
             if (char === '/') return 'space,';
             else if (char === ' ') return ','; // make speech pause between letters
@@ -313,14 +298,18 @@ function inputSpeech() {
         const morseVoice = getEnglishVoice();
         if (morseVoice) {
             inputsp.voice = morseVoice;
+        } else {
+            console.warn("Preferred Morse voice not found, using default voice");
         }
-        inputsp.lang = "en"; // set to english for morse code speaking
+        inputsp.lang = "en"; // set to english voice for morse code speaking
         inputsp.text = morseToSpeakable(inputtext.value);
     }
     if (inputsp.lang === "en") {
         const englishVoice = getEnglishVoice(); 
         if (englishVoice) {
             inputsp.voice = englishVoice;
+        } else {
+            console.warn("Preferred English voice not found, using default voice");
         }
     }
     if(!voicesReady) loadVoices();
@@ -335,20 +324,27 @@ function outputSpeech() {
         const morseVoice = getEnglishVoice();
         if (morseVoice) {
         outputsp.voice = morseVoice;
+        } else {
+            console.warn("Preferred Morse voice not found, using default voice");
         }
-        outputsp.lang = "en"; // set to english for morse code speaking
+        outputsp.lang = "en"; // set to english voice for morse code speaking
         outputsp.text = morseToSpeakable(outputtext.value);
     }
     if (opl.value === "en") {
     const englishVoice = getEnglishVoice(); 
         if (englishVoice) {
             outputsp.voice = englishVoice;
+        } else {
+            console.warn("Preferred English voice not found, using default voice");
         }
     }
     if (!voicesReady) loadVoices();
     if (speechSynthesis.speaking) speechSynthesis.cancel(); // stop current speech if still speaking
     else speechSynthesis.speak(outputsp);
 };
+
+
+// swap function
 
 function swapLanguages() {
     const temp = ipl.value;
@@ -359,6 +355,14 @@ function swapLanguages() {
     outputtext.value = tempText;
     translate();
 }
+// keyboard shortcut for swap - ctrl + shift + s
+document.addEventListener("keydown", function(event) {
+    if (event.altKey && event.key.toLowerCase() === "s") {
+        swapLanguages();
+    }
+});
+
+// copy to clipboard
 
 copyMessage = document.getElementById("copy-message");
 function copyToClipboard() {
@@ -372,14 +376,28 @@ function copyToClipboard() {
             }, 1000);
         }
     }).catch(err => {
-        alert("Failed to copy text", err);
+        console.error("Clipboard copy failed:", err); 
     });
 }
+// add keyboard shortcut for copy - ctrl + shift + c
+document.addEventListener("keydown", function(event) {
+    if (event.altKey && event.key.toLowerCase() === "c") {
+        copyToClipboard();
+    }
+});
+
+
+// side navigation menu for about and history
 
 // create history of recent translations, store in local storage, show in expandable menu, click to re-translate that text
 // once clicked, hide nav menu
 // add section next to translation box if browser is full screen
 // Could make side navigation tab - can put about info inside it as well as history
+
+document.getElementById("navopen").addEventListener("click", function(event) {
+    openNav();
+    event.stopPropagation(); 
+}); // open nav when clicking the open button, but stop event from propagating to document click listener that closes nav
 
 function openNav() {
     document.getElementById("sidenav").style.width = "35vw";
@@ -406,9 +424,87 @@ document.addEventListener("click", (e) => {
     }
 });
 
+const abouticon = document.getElementById("about-icon");   
 function showabout() {
     if (newabout.style.display === "block") {
         newabout.style.display = "none";
+        abouticon.style.transform = "rotate(0deg)";
+        abouticon.style.transitionDuration = "0.3s";
         return;
-    } else newabout.style.display = "block";
+    } else { newabout.style.display = "block";
+        abouticon.style.transform = "rotate(180deg)";
+        abouticon.style.transitionDuration = "0.3s";
+    }
+
+}
+//shotrcut for open nav - ctrl + shift + h
+document.addEventListener("keydown", function(event) {
+    if (event.altKey && event.key.toLowerCase() === "h") {
+        if (document.getElementById("sidenav").style.width === "0px") {
+            openNav();
+        } else {
+            closeNav();
+        }
+    }
+});
+
+
+//History implementation
+
+// 1. load existing history from local storage
+// 2. render history in side nav
+// 3. save lang and text to local storage after translation
+// 4. add items to history list
+// 5. click button to clear history from list and local storage
+// 6. click on history to re-translate in box - set input lang and text to that of history
+
+const histstorage = "translationHistory"; // key for local storage
+const histlist = document.getElementById("historylist"); // element to display history
+
+function loadHistory() { // used in render to load from local storage
+    try {
+        return JSON.parse(localStorage.getItem(histstorage)) || [];
+    } catch (err) {
+        console.error("Failed to load translation history:", err);
+        return [];
+    }
+}
+
+function renderHistory() { // create history list from local storage (do upon page load)
+    const history = loadHistory();
+    histlist.innerHTML = "";
+    history.forEach(({iplang, text, input, oplang}, index) => {
+        const li = document.createElement("li");
+        if (iplang === '') iplang = "auto"; // display auto instead of blank for auto detected input language
+        li.textContent = `${iplang}: \"${input}\" → ${oplang}: ${text}`;
+        li.addEventListener("click", () => retranslateFromHistory({iplang, text, input, oplang}));
+        histlist.appendChild(li);
+    });
+}
+
+function saveHistory(history) { // save to local storage
+    localStorage.setItem(histstorage, JSON.stringify(history));
+}
+
+function addToHistory(iplang, text, input, oplang) { // add new item using opl value and outputtext value
+    if (text.trim() === "") return; // dont save empty translations
+    let history = loadHistory(); // load existing history before adding new
+    history = history.filter(item => item.text !== text); // remove duplicates - remove item if the same as existing text (same text = same lang too)
+    history.unshift({ iplang, text, input, oplang }); // add to top of list
+    if (history.length > 10) history.pop(); // keep only last 10 items
+    saveHistory(history);
+    renderHistory(); // re-render history list after adding new item
+}
+
+function clearHistory() {
+    localStorage.removeItem(histstorage);
+    renderHistory();
+}
+
+function retranslateFromHistory({iplang, text, input, oplang}) {
+    inputtext.value = input;
+    ipl.value = iplang; // set input language to language code stored with this history text
+    op.value = oplang; // set output language to language code stored with this history text
+    translate();
+    closeNav();
 }

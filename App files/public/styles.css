@@ -7,7 +7,7 @@
     --ab: rgb(239, 237, 227); /* about button color */
     --abh: rgb(228, 226, 218); /* about button hover color */
     --aba: rgb(221, 219, 211); /* about button active color */
-    --abc: rgba(234, 232, 223, 0.7); /* about content box color */
+    --abc: rgba(225, 221, 205, 0.7); /* about content box color */
     --sh: rgb(186, 186, 186); /* dropdown box shadows */
     --bxb: rgb(157, 157, 157); /* border between boxes */
     --bxs: grey; /* display box shadow */
@@ -23,6 +23,8 @@
     --bth: black; /* button + github hover color */
     --bta: rgb(56, 56, 56); /* button active color */ 
     --cm: rgb(224, 221, 202); /* copy message background */ 
+    --tc: black; /* text color */
+    --dpb: rgb(255, 255, 255); /* dropdown background */
 }
 
 :root.dark-theme {
@@ -32,12 +34,12 @@
     --ghh: rgb(247, 216, 155);
     --gha: rgb(247, 216, 155);
     --ab: rgb(247, 216, 155);
-    --abh: rgb(248, 198, 99);
+    --abh: rgb(253, 211, 129);
     --aba: rgb(247, 216, 155);
-    --abc: rgba(253, 225, 169, 0.8);
+    --abc: rgba(75, 75, 75, 0.8);
     --sh: rgb(118, 118, 118);
     --bxb: rgb(90, 90, 90);
-    --bxs: rgb(54, 54, 54);
+    --bxs: rgb(91, 91, 91);
     --db: rgb(70, 70, 70);
     --opf: rgb(0, 0, 0);
     --op: white;
@@ -46,16 +48,20 @@
     --opd: rgb(247, 216, 155);
     --bt: rgb(230, 230, 230);
     --ips: rgb(82, 82, 82); /* input speech button color */
-    --ish: rgb(248, 198, 99); /* input speech button hover color */
+    --ish: rgb(253, 211, 129); /* input speech button hover color */
     --bth: rgb(247, 216, 155);
-    --bta: rgb(248, 198, 99);
+    --bta: rgb(245, 201, 114);
     --cm: rgb(74, 73, 73);
+    --tc: rgb(230, 230, 230);
+    --dpb: rgb(80, 80, 80); /* dropdown background */
 }
 
 body {
     background-color: var(--bg);
-    color: var(--bt);
+    color: var(--tc);
     min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 .theme {
@@ -72,20 +78,18 @@ body {
     display: block;
     width: 100%;
     border-radius: 3px;
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 16px);
+    font-size: clamp(12px, calc(0.8vw + 0.8vh), 15px);
     padding: 5px;
     background-color: var(--conc);
     cursor: pointer;
     margin-bottom: 10px;
     box-shadow: 1px 1px 3px var(--sh)
 }
-
 #theme-select:focus, #lang-select:focus {
     outline: none;
     box-shadow: 1px 1px 3px var(--sh);
     background-color: var(--abh);
 }
-
 #theme-select:hover, #lang-select:hover, #theme-select:active, #lang-select:active {
     transition-duration: 0.3s;
     background-color: var(--abh);
@@ -100,8 +104,8 @@ body {
     margin-left: 2.5%;
     margin-top: 20px;
     cursor: pointer;
+    color: var(--bt);
 }
-
 #navopen:hover  {
     color: var(--bth);
 }
@@ -120,55 +124,105 @@ body {
     transition: 0.5s;   
 }
 
-.closebtn {
+#closebtn {
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 16px;
     cursor: pointer;
+    color: var(--bt);
 }
 
-#sidenav a {
+#sidenav a, #history {
     display: block;
     font-family: 'courier new', courier, monospace;
     font-weight: bold;
     font-size: clamp(14px, calc(1vw + 1vh), 20px);
-    color: var(--bt);
+    color: var(--tc);
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     transition: 0.3s;
+}
+#newabout{
     cursor: pointer;
 }
-
-#sidenav a:hover {
+#newabout:hover, #closebtn:hover {
     color: var(--bth);
     transition-duration: 0.3s;
+}
+
+#about-icon {
+    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
 }
 
 #newaboutmessage {
     display: none;
     font-family: Arial;
-    font-size: clamp(12px, calc(1vw + 1vh), 20px);
-    padding: 0px 20px;
-    color: var(--bt);
+    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
+    margin: 0px 20px;
+    color: var(--tc);
     padding-bottom: 10px;
+    background-color: var(--abc);
+    padding: 10px;
 }
 
-#historytable {
-    border-collapse: collapse;
-    display: flex;
-    border: 3px solid black;
-    width: auto;
+#historylist {
+    color: var(--tc);
+    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
+    font-family: arial;
+    list-style-type: none;
+    white-space: nowrap;
+    overflow-x: auto;
+    margin: 0 20px;
 }
 
-td {
-    padding: 10px, auto;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
+#historylist::-webkit-scrollbar { /* for unsupported browsers */
+    width: 5px;
+    height: 5px;
+}
+#historylist::-webkit-scrollbar-track {
+    background: transparent;
+}
+#historylist::-webkit-scrollbar-thumb {
+    background-color: var(--sh);
+    border-radius: 10px;
+    cursor: pointer;
 }
 
-tr {
-    margin: 10px;
+li {
+    margin-bottom: 5px;
+    background-color: var(--abc);
+    cursor: pointer;
+    width: fit-content;
+    padding: 5px 10px;
+}
+li:hover {
+    color: var(--bth);
+    transition-duration: 0.3s;
+}
+
+ul {
+    padding-left: 0px; /* remove dafault padding on ul items*/
+}
+
+#clearhistory {
+    background: none;
+    border-radius: 30px;
+    border: 1px solid var(--bt);
+    color: var(--bt);
+    font-size: clamp(10px, calc(0.6vw + 0.6vh), 20px);
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 32px;
+}
+#clearhistory:hover {
+    color: var(--bth);
+    border: 1px solid var(--bth);
+    transition-duration: 0.3s;
+}
+
+p {
+    overflow-wrap: break-word;
 }
 
 .titlehead {
@@ -207,16 +261,13 @@ tr {
     color:var(--gh);
     background: none;
 }
-
 #githublink:focus {
     outline: none;
 }
-
 #githublink:hover {
     transition-duration: 0.3s;
     color: var(--ghh);
 }
-
 #githublink:active {
     color: var(--ghh);
     transition-duration: 0.1s;
@@ -227,6 +278,7 @@ tr {
     background-color: var(--opb);
     border: 1px solid var(--opb);
     justify-content: center;
+    align-items: center;
     margin: auto;
     margin-top: 30px;
     box-sizing: border-box;
@@ -245,10 +297,9 @@ tr {
     text-align: left;
     box-sizing: border-box;
     padding: 5px;
-    margin: 20px;
+    margin: 15px 20px;
     background-color: white;
     border-radius: 30px;
-    padding-bottom: 13px;
 }
 
 #output {
@@ -269,7 +320,7 @@ tr {
     padding: 10px;
     overflow-wrap: break-word;
     box-sizing: border-box;
-    height: 40vh;
+    height: 38vh;
     width: 100%;
     resize: none;
     border: none;
@@ -284,8 +335,6 @@ tr {
 #dropdowns { /* container for dropdown menus */
     display: flex;
     border: none;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
     padding: 10px;
     padding-bottom: 0;
     margin: auto;
@@ -297,12 +346,10 @@ tr {
 }
 
 .ipdown {
-    border-top-left-radius: 5px;
     padding-left: 5px;
 }
 
 .opdown {
-    border-top-right-radius: 5px;
     padding-right: 5px;
 }
 
@@ -330,20 +377,19 @@ tr {
 }
 
 select option {
-    background-color: var(--bg);
+    background-color: var(--dpb);
+    color: var(--tc);
 }
 
 #ip:focus, #op:focus {
     box-shadow: 2px 2px 5px var(--sh);
     outline: none;
 }
-
 #ip:hover, #ip:active {
     background-color: var(--abh);
     transition-duration: 0.3s;
     box-shadow: 1px 1px 3px var(--sh);
 }
-
 #op:hover, #op:active {
     background-color: var(--abh);
     transition-duration: 0.3s;
@@ -362,35 +408,16 @@ select option {
     color: var(--bt);
     cursor: pointer;
 }
-
 #swap:hover {
     color: var(--bth);
     transition-duration: 0.3s;
 }
-
 #swap:focus {
     outline: none;
 }
-
 #swap:active {
     color: var(--ghh);
     rotate: 180deg;
-}
-
-select option {
-    background-color: var(--opd);
-} 
-
-select option:hover {
-    background-color: var(--opd);
-}
-
-select option:focus {
-    background-color: var(--opd);
-}
-
-select:active {
-    background-color: var(--opd);
 }
 
 #opcopy {
@@ -415,20 +442,28 @@ select:active {
     outline: none;
     color: var(--bth);
 }
-
 #ipspeech:hover, #opspeech:hover, #opcopy:hover {
     color: var(--bth);
     transition-duration: 0.1s;
 }
-
 #ipspeech:hover {
     color: var(--ish);
 }
-
 #ipspeech:active, #opspeech:active, #opcopy:active {
     transform: scale(0.99);
     color: var(--bta);
     transition-duration: 0.1s;
+}
+
+#counter {
+    font-family: Arial;
+    font-weight: bold;
+    color: rgb(157, 157, 157);
+    font-size: clamp(12px, calc(0.6vw + 0.6vh), 20px);
+    margin-left: 10px;
+    float: right;
+    margin-right: 15px;
+    margin-top: 7px;
 }
 
 .copyset {
@@ -446,4 +481,34 @@ select:active {
     color: var(--obf);
     padding: 5px 10px;
     border-radius: 5px;
+}
+
+#translate-container {
+    display: flex;
+    justify-content: center;
+}
+
+#translate {
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 30px;
+    border: none;
+    margin: 0px 20px 15px 20px;
+    padding: 5px;
+    font-family: Arial;
+    font-size: clamp(14px, calc(1vw + 1vh), 2vh);
+    font-weight: bold;
+    background-color: var(--opd);
+    cursor: pointer;
+    box-shadow: 1px 1px 3px var(--sh);
+}
+#translate:hover {
+    transition-duration: 0.3s;
+    box-shadow: 1px 1px 7px var(--sh);
+}
+#translate:active {
+    box-shadow: 1px 1px 3px var(--sh);
+    background-color: var(--abh);
+    transition-duration: 0.1s;
 }
