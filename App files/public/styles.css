@@ -62,6 +62,9 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    max-width: 1200px;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .theme {
@@ -78,7 +81,7 @@ body {
     display: block;
     width: 100%;
     border-radius: 3px;
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 15px);
+    font-size: clamp(12px, calc(1vw + 1vh), 16px);
     padding: 5px;
     background-color: var(--conc);
     cursor: pointer;
@@ -100,7 +103,7 @@ body {
     float: left;
     font-family: 'courier new', courier, monospace;
     font-weight: bold;
-    font-size: clamp(18px, calc(1.25vw + 1.25vh), 22px);
+    font-size: clamp(18px, calc(1vw + 1vh), 22px);
     margin-left: 2.5%;
     margin-top: 20px;
     cursor: pointer;
@@ -121,7 +124,8 @@ body {
     padding-top: 60px;
     box-shadow: 2px 0 5px var(--sh);
     overflow-x: hidden;
-    transition: 0.5s;   
+    transition: 0.5s;  
+    max-width: 650px; 
 }
 
 #closebtn {
@@ -137,7 +141,7 @@ body {
     display: block;
     font-family: 'courier new', courier, monospace;
     font-weight: bold;
-    font-size: clamp(14px, calc(1vw + 1vh), 20px);
+    font-size: clamp(14px, calc(1vw + 1vh), 18px);
     color: var(--tc);
     padding: 8px 8px 8px 32px;
     text-decoration: none;
@@ -152,13 +156,13 @@ body {
 }
 
 #about-icon {
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
+    font-size: clamp(12px, calc(1vw + 1vh), 16px);
 }
 
 #newaboutmessage {
     display: none;
     font-family: Arial;
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
+    font-size: clamp(12px, calc(1vw + 1vh), 16px);
     margin: 0px 20px;
     color: var(--tc);
     padding-bottom: 10px;
@@ -168,7 +172,7 @@ body {
 
 #historylist {
     color: var(--tc);
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
+    font-size: clamp(12px, calc(1vw + 1vh), 16px);
     font-family: arial;
     list-style-type: none;
     white-space: nowrap;
@@ -210,7 +214,7 @@ ul {
     border-radius: 30px;
     border: 1px solid var(--bt);
     color: var(--bt);
-    font-size: clamp(10px, calc(0.6vw + 0.6vh), 20px);
+    font-size: clamp(10px, calc(1vw + 1vh), 14px);
     cursor: pointer;
     margin-top: 10px;
     margin-left: 32px;
@@ -315,16 +319,17 @@ p {
     outline: none;
     font-family: Arial;
     text-align: left;
-    font-size: clamp(16px, calc(1.5vh + 1.5vw), 3vh);
+    font-size: clamp(16px, calc(1vh + 1vw), 20px);
     margin: auto;
     padding: 10px;
     overflow-wrap: break-word;
     box-sizing: border-box;
-    height: 38vh;
+    height: 35vh;
     width: 100%;
     resize: none;
     border: none;
     background: none;
+    max-height: 400px;
 }
 
 #textoutput {
@@ -358,7 +363,7 @@ p {
     font-family: Arial;
     border: none;
     border-radius: 30px;
-    font-size: clamp(14px, calc(1vw + 1vh), 2vh);
+    font-size: clamp(14px, calc(1vw + 1vh), 18px);
     color: var(--opf);
     cursor: pointer;
     padding-left: 10px;
@@ -404,7 +409,7 @@ select option {
     padding: 10px;
     margin: 2px;
     font-family: Arial;
-    font-size: clamp(14px, calc(1vw + 1vh), 2.5vh);
+    font-size: clamp(14px, calc(1vw + 1vh), 18px);
     color: var(--bt);
     cursor: pointer;
 }
@@ -429,7 +434,7 @@ select option {
     border: none;
     cursor: pointer;
     color: var(--bt);
-    font-size: clamp(14px, calc(1vw + 1vh), 2.5vh);
+    font-size: clamp(14px, calc(1vw + 1vh), 18px);
     margin-top: 5px;
 }
 
@@ -497,7 +502,7 @@ select option {
     margin: 0px 20px 15px 20px;
     padding: 5px;
     font-family: Arial;
-    font-size: clamp(14px, calc(1vw + 1vh), 2vh);
+    font-size: clamp(14px, calc(1vw + 1vh), 18px);
     font-weight: bold;
     background-color: var(--opd);
     cursor: pointer;

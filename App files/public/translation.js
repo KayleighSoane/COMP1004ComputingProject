@@ -240,7 +240,7 @@ function translate() { // main function called that processess all inputs
         addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after translation
     } 
     else if (ipl.value === "mc" && opl.value === "en") { // morse code only works to english
-        morsetoenglish();Z
+        morsetoenglish();
         addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after translation
     } else if (ipl.value == "mc" || opl.value === "mc") { // can api translate morse? could use my version for english, and api for others
         outputtext.value = "Morse Code translation does not work with this language.";
@@ -396,8 +396,8 @@ document.addEventListener("keydown", function(event) {
 
 document.getElementById("navopen").addEventListener("click", function(event) {
     openNav();
-    event.stopPropagation(); 
-}); // open nav when clicking the open button, but stop event from propagating to document click listener that closes nav
+    event.stopPropagation();  // stop event from propagating to document click listener that closes nav
+}); 
 
 function openNav() {
     document.getElementById("sidenav").style.width = "35vw";
