@@ -145,7 +145,8 @@ body {
     padding-top: 60px;
     box-shadow: 2px 0 5px var(--sh);
     overflow-x: hidden;
-    transition: 0.5s;   
+    transition: 0.5s;  
+    max-width: 650px; 
 }
 #closebtn {
     position: absolute;
@@ -348,7 +349,7 @@ ul {
     padding: 10px;
     overflow-wrap: break-word;
     box-sizing: border-box;
-    height: 38vh;
+    height: 35vh;
     width: 100%;
     resize: none;
     border: none;
