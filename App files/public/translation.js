@@ -1,60 +1,53 @@
-let inputtext;
-let outputtext;
-let ipl;
-let opl;
-let lower;
-let copyMessage;
-let apiKey;
-let apiKeyFetched;
-let preferredEnglishVoiceM = "Microsoft Hazel Desktop - English (Great Britain)"; // microsoft browser
-let preferredEngishvoiceG = "Google UK English Female"; // google browser
-let availableVoices = [];
-let voicesReady;
-let inputspeech = document.getElementById("ipspeech");
-let outputspeech = document.getElementById("opspeech");
-let themeToggle = document.getElementById("theme-select");
+let inputtext = document.getElementById("userinput");
+let outputtext = document.getElementById("textoutput");
+let ipl = document.getElementById("ip"); 
+let opl = document.getElementById("op");
+let themecheckbox = document.getElementById("colch");
 let langToggle = document.getElementById("lang-select");
 
 
-themeToggle.addEventListener("change", function() {
-    if (themeToggle.value === "dark") {
-        document.documentElement.classList.add("dark-theme");
-    } else {
-        document.documentElement.classList.remove("dark-theme");
-    }
-    //save theme preference
-    localStorage.setItem("theme", themeToggle.value);
-});
-
-//on page load, set theme to saved preference
 document.addEventListener("DOMContentLoaded", function() {
+
+    loadVoices(); // saved as function to be able to call if voices not ready
+
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-        themeToggle.value = savedTheme;
+        themecheckbox.checked = savedTheme === "dark";
         if (savedTheme === "dark") {
             document.documentElement.classList.add("dark-theme");
         }
-    }
+    } // on page load, set theme to saved theme
+
+    saturateDropdowns(); 
+
+    // inputtext.addEventListener("input", translate, scheduleTranslate);
+    // ipl.addEventListener("change", scheduleTranslate);
+    // opl.addEventListener("change", scheduleTranslate);
+        // above is code needed to get translation automatically without pressing enter
+        // but causes too many api requests, so disabled (can charge money if too many calls)
+
+    ipl.addEventListener("change", translate);
+    opl.addEventListener("change", translate); // auto changes when languages change
+
+    renderHistory(); // render history on page load
+
 });
 
-//ability to change site language to different languages
-// call google api to translate elements
-// When language selected, send all element text through translation function and update elements with translated text
-// q is text, target is language to translate to, source is language to translate from (can be auto detected)
-// needs to read option value attribute for iso language code
+function toggleTheme() {
+    if (themecheckbox.checked) {
+        document.documentElement.classList.add("dark-theme");
+        localStorage.setItem("theme", "dark");
+    } else {
+        document.documentElement.classList.remove("dark-theme");
+        localStorage.setItem("theme", "light");
+    }
+};
 
-// how to get all UI text elements? add class and extract text from classes, then update inner text with translated text from api
-// adding extra class to divs affects css - use data instead of class
-
-
-
-
-// define translation dropdown languages in js not in html
-document.addEventListener("DOMContentLoaded", function() {
-    const lang = document.querySelectorAll(".ttext"); // all select elements with class 'text'
+function saturateDropdowns() {
+const lang = document.querySelectorAll(".ttext"); // all select elements with class 'text'
 
     lang.forEach((get, con) => {
-        for (let country in language) {
+        for (let country in language) { // language is object in languages.js
             let initial = "";
             if (con === 0 && country === "") { // set as default input
                 initial = "selected";
@@ -66,43 +59,68 @@ document.addEventListener("DOMContentLoaded", function() {
             get.insertAdjacentHTML("beforeend", option);
         }
     });
+};
 
-    inputtext = document.getElementById("userinput");
-    outputtext = document.getElementById("textoutput");
-    ipl = document.getElementById("ip"); // select element itself
-    opl = document.getElementById("op"); // select element itself
-
-    // inputtext.addEventListener("input", translate, scheduleTranslate);
-    // ipl.addEventListener("change", scheduleTranslate);
-    // opl.addEventListener("change", scheduleTranslate);
-        // above is code needed to get translation automatically without pressing enter
-        // but causes too many api requests, so disabled for now (can charge money if too many calls)
-
-    inputtext.addEventListener("keydown", function(event) {
-        if (event.ctrlKey && event.key === "Enter") {
-            translate();
+const morsedetected = () => {
+    if (inputtext.value.trim() === "") return false; // if input is empty, dont detect as morse code
+    const morseChars = ['.', '-', ' ', '/'];
+    for (let char of inputtext.value) {
+        if (!morseChars.includes(char)) {
+            return false; // if any character is not a valid morse code character, return false
         }
-    });
-    ipl.addEventListener("change", translate);
-    opl.addEventListener("change", translate); // auto changes when languages change
+    }
+    return true;
+};
 
-    const transbutton = document.getElementById("translate");
-    transbutton.addEventListener("click", translate);
-
-    renderHistory(); // render history on page load
-
-    const charcount = document.getElementById("charcount");
-    inputtext.addEventListener("input", function() {
-        const length = inputtext.value.length;
-        charcount.textContent = length;
-        if (length >= 500) {
-            charcount.style.color = "red";
+function translate() { // main function called that processess all inputs
+    outputtext.value = ""; //clear output box before new output
+    inputtext.value = inputtext.value.trim(); // remove extra spaces from input to avoid translation issues and false morse code detection
+    if (opl.value === "") {
+        opl.value = "en"; // set default output language
+    }
+    if (ipl.value === opl.value) {
+        outputtext.value = inputtext.value; //if both are the same language, just copy input to output
+    } else if (ipl.value === "" && morsedetected()) { // if auto detect and morse code detected, set to english and translate morse to english
+        ipl.value = "mc";
+        morsetoenglish();
+        addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after translation
+    }
+    else if (inputtext.value === "") {
+        outputtext.value = ""; //if input is empty, clear output, dont call translation
+    }
+    else if (ipl.value === "en" && opl.value === "mc") {
+        englishtomorse();
+        addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value);
+    } 
+    else if (ipl.value === "mc" && opl.value === "en") { // morse code only works to english
+        if (!morsedetected()) {
+            outputtext.value = "Please enter valid Morse Code.";
         } else {
-            charcount.style.color = "";
+            morsetoenglish();
+            addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value);
         }
-    });
-});
+    } else if (ipl.value === "mc" || opl.value === "mc") { // if using morse with any other language
+        outputtext.value = "Morse Code translation only works with English."; // doesnt save to history
+    } else {
+        otherlang(); // history added inside otherlang function since it is async
+    }
+};
 
+const transbutton = document.getElementById("translate"); // translate button - calling translate as onclick in html doesnt work
+transbutton.addEventListener("click", translate);
+
+function clearinput() {
+    inputtext.value = "";
+    charcount.textContent = "0";
+    charcount.style.color = "";
+}
+
+// translation shortcut - ctrl + enter
+inputtext.addEventListener("keydown", function(event) {
+    if (event.ctrlKey && event.key === "Enter") {
+        translate();
+    }
+});
 
 // Morse code implementation
 
@@ -132,12 +150,8 @@ const alphabet = [
     , '.', ',', '!', '?', '\'', '"', '-', ':', ';', '/'
 ];
 
-function lowercase() {
-    lower = inputtext.value.toLowerCase();
-}
-
 function englishtomorse() {
-    lowercase();
+    let lower = inputtext.value.toLowerCase();
     for (let i = 0; i < lower.length; i++) {
         const num = lower[i];
         if (num === " ") {
@@ -167,9 +181,9 @@ function morsetoenglish() {
     }
 }
 
-
 // API and language translation implementation
-
+let apiKey;
+let apiKeyFetched;
 async function fetchAPI() {
     if (apiKey) return apiKey; // if it already exists, return it without fetching again
     if (!apiKeyFetched) { // if not, fetch it
@@ -199,6 +213,7 @@ async function otherlang() { // all translation not morse code
         return;
     }
     try {
+        // definitions
         const url = `https://translation.googleapis.com/language/translate/v2?key=${key}`;
         const headers = {"Content-Type": "application/json"};
         const payload = {
@@ -207,6 +222,8 @@ async function otherlang() { // all translation not morse code
             target: opl.value,            
             format: "text"
         };
+
+        // request send to API
         const response = await fetch(url, {
             method: "POST", // post means sending data to api and also getting response back
             headers: headers,
@@ -222,40 +239,30 @@ async function otherlang() { // all translation not morse code
         addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after async translation
     } catch (error) {
         console.error("Translation error:", error);
-        outputtext.value = "Translation failed. Please check console for error.";
+        outputtext.value = "Translation failed.";
     }
 }
 
-function translate() { // main function called that processess all inputs
-    outputtext.value = ""; //clear output box before new output
-    inputtext.value = inputtext.value.trim(); // remove extra spaces from input to avoid translation issues and false morse code detection
-    if (ipl.value === opl.value) {
-        outputtext.value = inputtext.value; //if both are the same language, just copy input to output
-    }
-    else if (inputtext.value === "") {
-        outputtext.value = ""; //if input is empty, clear output, dont call translation
-    }
-    else if (ipl.value === "en" && opl.value === "mc") {
-        englishtomorse();
-        addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after translation
-    } 
-    else if (ipl.value === "mc" && opl.value === "en") { // morse code only works to english
-        morsetoenglish();Z
-        addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after translation
-    } else if (ipl.value == "mc" || opl.value === "mc") { // can api translate morse? could use my version for english, and api for others
-        outputtext.value = "Morse Code translation does not work with this language.";
+const charcount = document.getElementById("charcount");
+inputtext.addEventListener("input", function() {
+    const length = inputtext.value.length;
+    charcount.textContent = length;
+    if (length >= 500) {
+        charcount.style.color = "red";
     } else {
-        otherlang(); // history added inside otherlang function since it is async
+        charcount.style.color = "";
     }
-};
-
+});
 
 // Text to speech implementation
 
 // change speech to text english or morse voice to specific browser voices
 // if dropdown language is english, set voice to chosen speakers
 // if not available, use default voice
-document.addEventListener("DOMContentLoaded", function() { // load voices on page load
+let availableVoices = [];
+let voicesReady;
+
+function loadVoices() { // load voices on page load
     availableVoices = speechSynthesis.getVoices();
     if (availableVoices.length > 0) {
         voicesReady = true;
@@ -265,10 +272,13 @@ document.addEventListener("DOMContentLoaded", function() { // load voices on pag
             voicesReady = true;
         });
     }
-});    
+};    
+
 
 function getEnglishVoice() {
-    const voices = availableVoices
+    const preferredEnglishVoiceM = "Microsoft Hazel Desktop - English (Great Britain)"; // microsoft browser
+    const preferredEngishvoiceG = "Google UK English Female"; // google browser
+    let voices = availableVoices
     return voices.find(v => v.name === preferredEnglishVoiceM) 
     || voices.find(v => v.name === preferredEngishvoiceG)
     || voices.find(v => v.lang.startsWith("en-GB")) // fallback
@@ -277,9 +287,7 @@ function getEnglishVoice() {
 }   
 
 function morseToSpeakable(morseText) {
-    return morseText 
-        .split('')
-        .map(char => {
+    return morseText.split('').map(char => {
             if (char === '.') return 'dit'; // di and dah makes it flow better when spoken, and more recognizable as morse code
             if (char === '-') return 'dah';
             if (char === '/') return 'space,';
@@ -294,6 +302,16 @@ function morseToSpeakable(morseText) {
 function inputSpeech() {
     let inputsp = new SpeechSynthesisUtterance(inputtext.value);
     inputsp.lang = ipl.value;
+    if (ipl.value === "" && morsedetected()) { // set auto to english if morse detecetd
+        const autoVoice = getEnglishVoice();
+        if (autoVoice) {            
+            inputsp.voice = autoVoice;
+        } else {
+            console.warn("Preferred Morse voice not found, using default voice");
+        }         
+        inputsp.lang = "en"; // set to english voice for morse code speaking
+        inputsp.text = morseToSpeakable(inputtext.value);
+    }
     if (ipl.value === "mc") {
         const morseVoice = getEnglishVoice();
         if (morseVoice) {
@@ -320,6 +338,14 @@ function inputSpeech() {
 function outputSpeech() {
     let outputsp = new SpeechSynthesisUtterance(outputtext.value);
     outputsp.lang = opl.value;
+    if (opl.value === "") {
+        const autovoice = getEnglishVoice();
+        if (autovoice) {
+            outputsp.voice = autovoice;
+        } else {
+            console.warn("Preferred Morse voice not found, using default voice");
+        }
+    }
     if (opl.value === "mc") {
         const morseVoice = getEnglishVoice();
         if (morseVoice) {
@@ -355,18 +381,19 @@ function swapLanguages() {
     outputtext.value = tempText;
     translate();
 }
-// keyboard shortcut for swap - ctrl + shift + s
+// keyboard shortcut for swap - alt + s
 document.addEventListener("keydown", function(event) {
     if (event.altKey && event.key.toLowerCase() === "s") {
         swapLanguages();
     }
 });
 
+
 // copy to clipboard
 
-copyMessage = document.getElementById("copy-message");
+let copyMessage = document.getElementById("copy-message");
 function copyToClipboard() {
-    const textToCopy = outputtext.value;
+    let textToCopy = outputtext.value;
     navigator.clipboard.writeText(textToCopy).then(() => {
         if (copyMessage) {
             copyMessage.textContent = "Copied";
@@ -379,7 +406,7 @@ function copyToClipboard() {
         console.error("Clipboard copy failed:", err); 
     });
 }
-// add keyboard shortcut for copy - ctrl + shift + c
+// add keyboard shortcut for copy - alt + c
 document.addEventListener("keydown", function(event) {
     if (event.altKey && event.key.toLowerCase() === "c") {
         copyToClipboard();
@@ -388,43 +415,45 @@ document.addEventListener("keydown", function(event) {
 
 
 // side navigation menu for about and history
-
-// create history of recent translations, store in local storage, show in expandable menu, click to re-translate that text
-// once clicked, hide nav menu
-// add section next to translation box if browser is full screen
-// Could make side navigation tab - can put about info inside it as well as history
-
-document.getElementById("navopen").addEventListener("click", function(event) {
-    openNav();
+const navopen = document.getElementById("navopen");
+const sidenav = document.getElementById("sidenav");
+navopen.addEventListener("click", function(event) {
+    if (sidenav.style.width === "0px" || sidenav.style.width === "") {
+        openNav();
+    } else {
+        closeNav();
+    }
     event.stopPropagation(); 
 }); // open nav when clicking the open button, but stop event from propagating to document click listener that closes nav
 
 function openNav() {
-    document.getElementById("sidenav").style.width = "35vw";
+    if (newabout.style.display === "0vw") {
+        closeNav();
+    } else {
+        sidenav.style.width = "35vw";
+    }
 }
 
 function closeNav() {
     if (newabout.style.display === "block") {
         newabout.style.display = "none"; // also close about message if open
     }
-    document.getElementById("sidenav").style.width = "0px";
+    sidenav.style.width = "0px";
 }
 
 const newabout = document.getElementById("newaboutmessage");
+const abouticon = document.getElementById("about-icon");   
 
 document.addEventListener("click", (e) => {
-    const sidenav = document.getElementById("sidenav");
-    const navopen = document.getElementById("navopen");
-    
     if (!sidenav.contains(e.target) && e.target !== navopen) {
-        closeNav(); // if not click within sidenav, close
         if (newabout.style.display === "block") {
-            newabout.style.display = "none"; // also close about message if open
+            newabout.style.display = "none"; // close about message if open
+            abouticon.style.transform = "rotate(0deg)"; /// return arrow to original position
         }
+        closeNav(); // if not click within sidenav, close
     }
 });
 
-const abouticon = document.getElementById("about-icon");   
 function showabout() {
     if (newabout.style.display === "block") {
         newabout.style.display = "none";
@@ -437,10 +466,10 @@ function showabout() {
     }
 
 }
-//shotrcut for open nav - ctrl + shift + h
+//shortcut for open nav - alt + h
 document.addEventListener("keydown", function(event) {
     if (event.altKey && event.key.toLowerCase() === "h") {
-        if (document.getElementById("sidenav").style.width === "0px") {
+        if (sidenav.style.width === "0px") {
             openNav();
         } else {
             closeNav();
@@ -463,7 +492,7 @@ const histlist = document.getElementById("historylist"); // element to display h
 
 function loadHistory() { // used in render to load from local storage
     try {
-        return JSON.parse(localStorage.getItem(histstorage)) || [];
+        return JSON.parse(localStorage.getItem(histstorage)) || []; // if no history, return empty array
     } catch (err) {
         console.error("Failed to load translation history:", err);
         return [];
@@ -472,7 +501,7 @@ function loadHistory() { // used in render to load from local storage
 
 function renderHistory() { // create history list from local storage (do upon page load)
     const history = loadHistory();
-    histlist.innerHTML = "";
+    histlist.innerHTML = ""; // clear existing list before rendering
     history.forEach(({iplang, text, input, oplang}, index) => {
         const li = document.createElement("li");
         if (iplang === '') iplang = "auto"; // display auto instead of blank for auto detected input language
@@ -504,7 +533,19 @@ function clearHistory() {
 function retranslateFromHistory({iplang, text, input, oplang}) {
     inputtext.value = input;
     ipl.value = iplang; // set input language to language code stored with this history text
-    op.value = oplang; // set output language to language code stored with this history text
+    opl.value = oplang; // set output language to language code stored with this history text
     translate();
     closeNav();
 }
+
+function displayFunFact() {
+    const funfacts = document.getElementById("funfacts");
+    for (let key in facts) {
+        if (opl.value === key) {
+            funfacts.textContent = facts[key];
+            break;
+        }
+    }
+}
+opl.addEventListener("change", displayFunFact);
+document.addEventListener("DOMContentLoaded", displayFunFact); // also call on page load to show fact for default language

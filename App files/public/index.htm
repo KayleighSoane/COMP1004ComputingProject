@@ -23,93 +23,94 @@
 
 
     <body>
-        
-        <div data-trans="lang" class="theme">
-            <select id="theme-select" title="Colour Theme">
-                <option value="light" selected>Light</option>
-                <option value="dark">Dark</option>
-            </select>
 
-            <select id="lang-select" title="Language">
-                <option value="en">English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
-                <option value="zh">Chinese</option>
-            </select>
-
-        </div>
-
-        <div data-trans="lang" id="sidenav">
-            <a id="closebtn" title="Close" onclick="closeNav()"><i class="fa-solid fa-x"></i></a>
-            
-            <a title="About" id="newabout" onclick="showabout()">About <i id="about-icon" class="fa-solid fa-angle-down"></i></a>
-            <p title="About Wordio" id="newaboutmessage">Morse code is only compatible with English.<br>Select Auto to detect input language automatically.<br>Click on history items to retranslate the output text.</p>
-            
-            <a title="History" id="history">History</a>
-            <ul title="Translation History" id="historylist"></ul>
-
-            <button id="clearhistory" title="Clear History" onclick="clearHistory()">Clear History</button>
-        </div>        
-        <span id="navopen" title="About + History (Alt+H)" onclick="openNav()"><i class="fa-solid fa-bars"></i> About + History</span>
-        
-        <div class="titlehead">
-            <div id="title">
-                <h1>Wordio</h1>
-            </div>
-            
-            <div class="tlinks">
-                <div id="github">
-                    <button id="githublink" title="GitHub Repository" onclick="window.open('https://github.com/KayleighSoane/COMP1004ComputingProject', '_blank')"><i class="fa-brands fa-github"></i></button>
+        <div id="toppart">
+            <div class="theme">
+                
+                <div class="coltoggle">
+                    <input type="checkbox" id="colch" title="Toggle Theme" onclick="toggleTheme()">
+                    <span id="slider"></span>
                 </div>
+
             </div>
+
+            <div id="sidenav">
+                <a id="closebtn" title="Close" onclick="closeNav()"><i class="fa-solid fa-x"></i></a>
+                
+                <a title="About Wordio" id="newabout" onclick="showabout()">About <i id="about-icon" class="fa-solid fa-angle-down"></i></a>
+                <p title="About Wordio" id="newaboutmessage">Morse code is only compatible with English.<br>Select Auto to detect input language automatically.<br>Click on history items to retranslate the output text.</p>
+                
+                <a title="History" id="history">History</a>
+                <ul title="Translation History" id="historylist"></ul>
+
+                <button id="clearhistory" title="Clear History" onclick="clearHistory()">Clear History</button>
+            </div>        
+            <span id="navopen" title="About + History (Alt+H)"><i class="fa-solid fa-bars"></i> About + History</span>
             
+            <div class="titlehead">
+                <div id="title">
+                    <h1>Wordio</h1>
+                </div>
+                
+                <div class="github">
+                        <button id="githublink" title="GitHub Repository" onclick="window.open('https://github.com/KayleighSoane/COMP1004ComputingProject', '_blank')"><i class="fa-brands fa-github"></i></button>
+                </div>
+                
+            </div>
         </div>
         
-        
-        <div data-trans="lang" class="display">
-            
-            <div id="dropdowns">
-                <div class="ipdown">
-                    <select class="ttext" title="Input language" id="ip">
-                        <option value="" selected>Auto</option> <!-- auto added only to input -->
-                    </select>
-                </div>
+        <div id="mainpart">
+            <div class="display">
                 
-                <button id="swap" title="Swap (Alt+S)" onclick="swapLanguages()"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
-                
-                <div class="opdown">
-                    <select class="ttext" title="Output language" id="op"></select> <!-- coded in translation.js -->
-                </div>
-            </div>
-            
-            <div class="textboxes">
-                <div id="input">
-                    <textarea maxlength="500" id="userinput" autocomplete="on" placeholder ="Enter text..." title="Text input"></textarea>
+                <div id="dropdowns">
+                    <div class="ipdown">
+                        <select class="ttext" title="Input Language" id="ip">
+                            <option value="" selected>Auto</option>
+                        </select>
+                    </div>
                     
-                    <button id="ipspeech" title="Speak" onclick="inputSpeech()"><i class="fa-solid fa-microphone"></i></button>
-                    <p id="counter"><span id="charcount">0</span>/500</p>
-                </div>
-                
-                <div id="output">
-                    <textarea readonly id="textoutput" autocomplete="on" placeholder ="Translation" title="Text output"></textarea>
+                    <button id="swap" title="Swap (Alt+S)" onclick="swapLanguages()"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
                     
-                    <div class="copyset">
-                        <button id="opspeech" title="Speak" onclick="outputSpeech()"><i class="fa-solid fa-microphone"></i></button>
-                        <button id="opcopy" title="Copy (Alt+C)" onclick="copyToClipboard()"><i class="fa-solid fa-copy"></i></button>
-                        <div id="copy-message" aria-live="polite">Copied to Clipboard</div>    
+                    <div class="opdown">
+                        <select class="ttext" title="Output Language" id="op">
+                        </select>
                     </div>
                 </div>
                 
-            </div>
+                <div class="textboxes">
+                    <div id="input">
+                        <textarea maxlength="500" id="userinput" autocomplete="on" placeholder ="Enter text..." title="Text Input"></textarea>
+                        
+                        <button id="ipspeech" title="Speak" onclick="inputSpeech()"><i class="fa-solid fa-microphone"></i></button>
+                        <button id="clearinput" title="Clear Input" onclick="clearinput()"><i class="fa-solid fa-delete-left"></i></button>
+                        <p id="counter"><span id="charcount">0</span>/500</p>
+                    </div>
+                    
+                    <div id="output">
+                        <textarea readonly id="textoutput" autocomplete="on" placeholder ="Translation" title="Text Output"></textarea>
+                        
+                        <div class="copyset">
+                            <button id="opspeech" title="Speak" onclick="outputSpeech()"><i class="fa-solid fa-microphone"></i></button>
+                            <button id="opcopy" title="Copy (Alt+C)" onclick="copyToClipboard()"><i class="fa-solid fa-copy"></i></button>
+                            <div id="copy-message" aria-live="polite">Copied to Clipboard</div>    
+                        </div>
+                    </div>
+                    
+                </div>
 
-            <div id="translate-container">
-            <button id="translate" title="Translate (Ctrl+Enter)">Translate</button>
+                <div id="translate-container">
+                <button id="translate" title="Translate (Ctrl+Enter)">Translate</button>
+                </div>
+                
+            </div>
+            
+            <div id="displayfacts">
+            <a id="funfacts"></a>
             </div>
 
         </div>
 
-        <script src="languages.js"></script>
+        <script src="library.js"></script>
         <script src="translation.js"></script>
 
     </body>

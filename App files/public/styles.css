@@ -1,129 +1,152 @@
 :root {
     --bg: white; /* background color */
-    --conc: rgb(239, 237, 227); /* contrast color */
     --gh: rgb(77, 77, 77); /* github icon color */
-    --ghh: rgb(56, 56, 56); /* github icon hover color */
-    --gha: rgb(70, 70, 70); /* github icon active color */
-    --ab: rgb(239, 237, 227); /* about button color */
-    --abh: rgb(228, 226, 218); /* about button hover color */
-    --aba: rgb(221, 219, 211); /* about button active color */
-    --abc: rgba(225, 221, 205, 0.7); /* about content box color */
     --sh: rgb(186, 186, 186); /* dropdown box shadows */
-    --bxb: rgb(157, 157, 157); /* border between boxes */
     --bxs: grey; /* display box shadow */
     --db: #dadada; /* display border */
-    --opb: rgb(239, 237, 227); /* output box background */
-    --oph: rgb(228, 226, 218); /* output box hover color */
+    --opb: rgba(245, 245, 245, 0.297); /* output box background */
+    --ipb: rgb(255, 255, 255); /* input box background */
     --opf: black; /* output box font color */
     --op: black;
-    --opd: rgb(255, 255, 240); /* output box display color */
     --bt: rgb(67, 67, 67); /* button color */
     --ips: rgb(56, 56, 56); /* input speech button color */
-    --ish: rgb(0, 0, 0); /* input speech button hover color */
-    --bth: black; /* button + github hover color */
-    --bta: rgb(56, 56, 56); /* button active color */ 
-    --cm: rgb(224, 221, 202); /* copy message background */ 
     --tc: black; /* text color */
     --dpb: rgb(255, 255, 255); /* dropdown background */
+    --navbg: rgb(239, 239, 239); /* sidenav background */
+    --clearhist: rgb(253, 78, 78);
+    --blue: rgb(119, 212, 249); /* blue color for testing */
+    --bluecontr: rgb(119, 212, 249, 0.7); /* blue color with transparency for testing */
+    --green: rgb(68, 250, 126, 0.7); /* green color for testing */
+    --greencontr: rgba(68, 250, 126, 0.557); /* green color with transparency for testing */
+    --red: rgb(239, 120, 120); /* red color for testing */
+    --redcontr: rgb(239, 120, 120, 0.7); /* red color with transparency for testing */
 }
 
 :root.dark-theme {
     --bg: rgb(40,40,40);
-    --conc: rgb(247, 216, 155);
     --gh: white;
-    --ghh: rgb(247, 216, 155);
-    --gha: rgb(247, 216, 155);
-    --ab: rgb(247, 216, 155);
-    --abh: rgb(253, 211, 129);
-    --aba: rgb(247, 216, 155);
-    --abc: rgba(75, 75, 75, 0.8);
     --sh: rgb(118, 118, 118);
-    --bxb: rgb(90, 90, 90);
     --bxs: rgb(91, 91, 91);
     --db: rgb(70, 70, 70);
+    --opb: rgb(57, 57, 57);
+    --ipb: rgb(255, 255, 255); /* input box background */
     --opf: rgb(0, 0, 0);
     --op: white;
-    --opb: rgb(57, 57, 57);
-    --oph: rgb(82, 82, 82);
-    --opd: rgb(247, 216, 155);
     --bt: rgb(230, 230, 230);
-    --ips: rgb(82, 82, 82); /* input speech button color */
-    --ish: rgb(253, 211, 129); /* input speech button hover color */
-    --bth: rgb(247, 216, 155);
-    --bta: rgb(245, 201, 114);
-    --cm: rgb(74, 73, 73);
+    --ips: rgb(56, 56, 56);
     --tc: rgb(230, 230, 230);
     --dpb: rgb(80, 80, 80); /* dropdown background */
+    --navbg: rgb(57, 57, 57); /* sidenav background */
+    --clearhist: rgb(253, 78, 78);
+    --blue: rgb(89, 204, 249); /* blue color for testing */
+    --bluecontr: rgb(119, 212, 249); /* blue color with transparency for testing */
+    --green: rgb(48, 250, 112); /* green color for testing */
+    --greencontr: rgb(83, 251, 136); /* green color with transparency for testing */
+    --red: rgb(242, 89, 89); /* red color for testing */
+    --redcontr: rgb(239, 120, 120); /* red color with transparency for testing */
 }
+
 
 body {
     background-color: var(--bg);
     color: var(--tc);
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
+    min-width: 700px;
 }
 
+
+.toppart {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+}
+
+
 .theme {
+    align-items: center;
+    gap: 10px;
+    display: flex;
     position: relative;
     float: right;
     margin-top: 20px;
-    margin-right: 2.5%;
+    margin-right: 3%;
     margin-bottom: 20px
 }
-
-#theme-select, #lang-select { /* theme and language dropdown */
-    border: black;
-    color: var(--opf);
-    display: block;
-    width: 100%;
-    border-radius: 3px;
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 15px);
-    padding: 5px;
-    background-color: var(--conc);
-    cursor: pointer;
-    margin-bottom: 10px;
+.coltoggle {
+    position: relative;
+    width: 50px;
+    height: 25px;
+    border-radius: 15px;
+    margin-right: 10px;
+}
+.coltoggle:hover {
     box-shadow: 1px 1px 3px var(--sh)
 }
-#theme-select:focus, #lang-select:focus {
-    outline: none;
-    box-shadow: 1px 1px 3px var(--sh);
-    background-color: var(--abh);
+#colch {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    z-index: 2;
+    cursor: pointer;
 }
-#theme-select:hover, #lang-select:hover, #theme-select:active, #lang-select:active {
-    transition-duration: 0.3s;
-    background-color: var(--abh);
-    box-shadow: 1px 1px 3px var(--sh);
+#slider {
+    position: absolute;
+    inset: 0;
+    width: 50px;
+    height: 25px;
+    background-color: var(--gh);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.4s;
+    pointer-events: none;
 }
+#slider:before {
+    content: "";
+    position: absolute;
+    width: 21px;
+    height: 21px;
+    left: 2px;
+    top: 2px;
+    background-color: var(--bg);
+    border-radius: 50%;
+    transition: 0.4s
+}
+ #colch:checked + #slider:before {
+    transform: translateX(25px);
+}
+
 
 #navopen {
     float: left;
     font-family: 'courier new', courier, monospace;
     font-weight: bold;
-    font-size: clamp(18px, calc(1.25vw + 1.25vh), 22px);
+    font-size: 20px;
     margin-left: 2.5%;
     margin-top: 20px;
+    padding-left: 10px;
     cursor: pointer;
     color: var(--bt);
 }
 #navopen:hover  {
-    color: var(--bth);
+    color: var(--red);
+    transition-duration: 0.3s;
 }
-
 #sidenav {
     z-index: 1;
     position: fixed;
     top: 0;
     left: 0;
     width: 0;
+    max-width: 400px;
     height: 100%;
-    background-color: var(--opb);
+    background-color: var(--navbg);
     padding-top: 60px;
     box-shadow: 2px 0 5px var(--sh);
     overflow-x: hidden;
     transition: 0.5s;   
 }
-
 #closebtn {
     position: absolute;
     top: 10px;
@@ -132,50 +155,47 @@ body {
     cursor: pointer;
     color: var(--bt);
 }
-
 #sidenav a, #history {
     display: block;
     font-family: 'courier new', courier, monospace;
     font-weight: bold;
-    font-size: clamp(14px, calc(1vw + 1vh), 20px);
+    font-size: 14px;
     color: var(--tc);
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     transition: 0.3s;
 }
 #newabout{
+    color: var(--bt);
     cursor: pointer;
 }
 #newabout:hover, #closebtn:hover {
-    color: var(--bth);
+    color: var(--blue);
     transition-duration: 0.3s;
 }
-
 #about-icon {
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
+    font-size: 14px;
 }
-
 #newaboutmessage {
     display: none;
     font-family: Arial;
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
+    font-size: 12px;
     margin: 0px 20px;
     color: var(--tc);
     padding-bottom: 10px;
-    background-color: var(--abc);
     padding: 10px;
 }
 
+
 #historylist {
-    color: var(--tc);
-    font-size: clamp(12px, calc(0.8vw + 0.8vh), 20px);
+    color: black;
+    font-size: 12px;
     font-family: arial;
     list-style-type: none;
     white-space: nowrap;
     overflow-x: auto;
     margin: 0 20px;
 }
-
 #historylist::-webkit-scrollbar { /* for unsupported browsers */
     width: 5px;
     height: 5px;
@@ -188,42 +208,32 @@ body {
     border-radius: 10px;
     cursor: pointer;
 }
-
 li {
     margin-bottom: 5px;
-    background-color: var(--abc);
+    background-color: var(--green);
     cursor: pointer;
     width: fit-content;
     padding: 5px 10px;
 }
-li:hover {
-    color: var(--bth);
-    transition-duration: 0.3s;
-}
-
 ul {
     padding-left: 0px; /* remove dafault padding on ul items*/
 }
-
 #clearhistory {
     background: none;
     border-radius: 30px;
     border: 1px solid var(--bt);
-    color: var(--bt);
-    font-size: clamp(10px, calc(0.6vw + 0.6vh), 20px);
+    color: var(--tc);
+    font-size: 10px;
     cursor: pointer;
     margin-top: 10px;
     margin-left: 32px;
 }
 #clearhistory:hover {
-    color: var(--bth);
-    border: 1px solid var(--bth);
+    color: var(--clearhist);
+    border: 1px solid var(--clearhist);
     transition-duration: 0.3s;
 }
 
-p {
-    overflow-wrap: break-word;
-}
 
 .titlehead {
     display: flex;
@@ -237,19 +247,15 @@ p {
     height: 50px;
     width: 95%;
 }
-
-.tlinks {
-    display: flex;
-    margin-left: auto;
-    align-items: center;
-}
-
 #title {
     font-family: 'Courier New', Courier, monospace;
     letter-spacing: 2px;
     font-size: 20px;
 }
-
+.github {
+    display: flex;
+    margin-left: auto;
+}
 #githublink {
     border: none;
     border-radius: 100%;
@@ -266,31 +272,56 @@ p {
 }
 #githublink:hover {
     transition-duration: 0.3s;
-    color: var(--ghh);
+    color: var(--red);
 }
 #githublink:active {
-    color: var(--ghh);
+    color: var(--redcontr);
     transition-duration: 0.1s;
 }
+
+
+#mainpart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+}
+
 
 .display { /* total display box including translate button*/
     box-shadow: 3px 3px 5px var(--bxs);
     background-color: var(--opb);
     border: 1px solid var(--opb);
-    justify-content: center;
-    align-items: center;
-    margin: auto;
+    box-sizing: border-box;
+    border-radius: 30px;
     margin-top: 30px;
+    width: 90%;
+    min-width: 600px;
+    max-width: 1000px;
+}
+
+
+#displayfacts {
     box-sizing: border-box;
     width: 90%;
-    border-radius: 30px;
+    min-width: 600px;
+    max-width: 1000px;
+    margin-top: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 14px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
+
 
 .textboxes {  /* surrounds both boxes */
     display: flex;
     justify-content: center;
 }
-
 #input, #output { /* individual boxes */
     width: 50%;
     height: 100%;
@@ -301,21 +332,18 @@ p {
     background-color: white;
     border-radius: 30px;
 }
-
 #output {
     background: none;
 }
-
 ::placeholder, #textoutput{ /* placeholder text and output text */
     font-weight: bold;
 }
-
 #userinput, #textoutput { /* text areas */
     align-items: center;
     outline: none;
     font-family: Arial;
     text-align: left;
-    font-size: clamp(16px, calc(1.5vh + 1.5vw), 3vh);
+    font-size: 20px;
     margin: auto;
     padding: 10px;
     overflow-wrap: break-word;
@@ -325,12 +353,18 @@ p {
     resize: none;
     border: none;
     background: none;
+    max-height: 300px;
+    min-height: 200px;
 }
-
 #textoutput {
     cursor: default;
     color: var(--op);
 }
+#input {
+    box-shadow: 1px 1px 3px var(--sh);
+    background-color: var(--ipb);
+}
+
 
 #dropdowns { /* container for dropdown menus */
     display: flex;
@@ -339,63 +373,57 @@ p {
     padding-bottom: 0;
     margin: auto;
 }
-
 .ipdown, .opdown { /* dropdown containers */
     display: flex;
     width: 50%;
 }
-
 .ipdown {
     padding-left: 5px;
 }
-
 .opdown {
     padding-right: 5px;
 }
-
 #ip, #op { /* both dropdown menus */
     position: relative;
     font-family: Arial;
     border: none;
     border-radius: 30px;
-    font-size: clamp(14px, calc(1vw + 1vh), 2vh);
+    font-size: 15px;
     color: var(--opf);
     cursor: pointer;
     padding-left: 10px;
     margin: 5px;
     box-shadow: 1px 1px 3px var(--sh);
 }
-
 #ip { /* input dropdown */
-    background-color: white;
+    background-color: var(--green);
     width: 100%;
 }
-
 #op { /* output dropdown */
-    background: var(--opd);
+    background: var(--blue);
     width: 100%;
 }
-
 select option {
     background-color: var(--dpb);
     color: var(--tc);
+    font-size: 12px;
 }
+
 
 #ip:focus, #op:focus {
     box-shadow: 2px 2px 5px var(--sh);
     outline: none;
 }
 #ip:hover, #ip:active {
-    background-color: var(--abh);
+    background-color: var(--greencontr);
     transition-duration: 0.3s;
     box-shadow: 1px 1px 3px var(--sh);
 }
 #op:hover, #op:active {
-    background-color: var(--abh);
+    background-color: var(--bluecontr);
     transition-duration: 0.3s;
     box-shadow: 1px 1px 3px var(--sh);
 }
-
 #swap {
     position: relative;
     background: none;
@@ -404,90 +432,77 @@ select option {
     padding: 10px;
     margin: 2px;
     font-family: Arial;
-    font-size: clamp(14px, calc(1vw + 1vh), 2.5vh);
-    color: var(--bt);
+    font-size: 18px;
+    color: var(--gh);
     cursor: pointer;
 }
 #swap:hover {
-    color: var(--bth);
     transition-duration: 0.3s;
 }
 #swap:focus {
     outline: none;
 }
 #swap:active {
-    color: var(--ghh);
     rotate: 180deg;
 }
-
 #opcopy {
     float: right;
 }
-
-#ipspeech, #opspeech, #opcopy { 
+#ipspeech, #opspeech, #opcopy, #clearinput { 
     background-color: transparent;
     border: none;
     cursor: pointer;
     color: var(--bt);
-    font-size: clamp(14px, calc(1vw + 1vh), 2.5vh);
+    font-size: 17px;
     margin-top: 5px;
 }
-
-#ipspeech {
+#ipspeech, #clearinput {
     color: var(--ips);
     padding-left: 10px;
 }
-
-#ipspeech:focus, #opspeech:focus, #opcopy:focus {
-    outline: none;
-    color: var(--bth);
-}
-#ipspeech:hover, #opspeech:hover, #opcopy:hover {
-    color: var(--bth);
+#ipspeech:hover, #opspeech:hover, #opcopy:hover, #clearinput:hover {
+    color: var(--green);
     transition-duration: 0.1s;
 }
 #ipspeech:hover {
-    color: var(--ish);
+    color: var(--green);
 }
-#ipspeech:active, #opspeech:active, #opcopy:active {
+#ipspeech:active, #opspeech:active, #opcopy:active, #clearinput:active {
     transform: scale(0.99);
-    color: var(--bta);
+    color: var(--greencontr);
     transition-duration: 0.1s;
 }
-
 #counter {
     font-family: Arial;
     font-weight: bold;
     color: rgb(157, 157, 157);
-    font-size: clamp(12px, calc(0.6vw + 0.6vh), 20px);
+    font-size: 15px;
     margin-left: 10px;
     float: right;
     margin-right: 15px;
     margin-top: 7px;
 }
-
 .copyset {
     position: relative;
 }
-
 #copy-message {
     display: none;
     position: absolute;
-    font-size: clamp(14px, calc(1.5vw + 1.5vh), 2vh);
+    font-size: 14px;
     font-family: arial;
     top: -25px;
     right: 0;
-    background: var(--cm);
+    background: var(--greencontr);
     color: var(--obf);
     padding: 5px 10px;
     border-radius: 5px;
 }
 
+
 #translate-container {
     display: flex;
     justify-content: center;
 }
-
 #translate {
     justify-content: center;
     box-sizing: border-box;
@@ -497,9 +512,9 @@ select option {
     margin: 0px 20px 15px 20px;
     padding: 5px;
     font-family: Arial;
-    font-size: clamp(14px, calc(1vw + 1vh), 2vh);
+    font-size: 15px;
     font-weight: bold;
-    background-color: var(--opd);
+    background-color: var(--red);
     cursor: pointer;
     box-shadow: 1px 1px 3px var(--sh);
 }
@@ -509,6 +524,6 @@ select option {
 }
 #translate:active {
     box-shadow: 1px 1px 3px var(--sh);
-    background-color: var(--abh);
+    background-color: var(--redcontr);
     transition-duration: 0.1s;
 }
