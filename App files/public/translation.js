@@ -3,16 +3,15 @@ let outputtext = document.getElementById("textoutput");
 let ipl = document.getElementById("ip"); 
 let opl = document.getElementById("op");
 let themecheckbox = document.getElementById("colch");
-let langToggle = document.getElementById("lang-select");
 
 
 document.addEventListener("DOMContentLoaded", function() {
 
     loadVoices(); // saved as function to be able to call if voices not ready
 
-    const savedTheme = localStorage.getItem("theme");
+    const savedTheme = localStorage.getItem("theme"); // theme is key under which theme is saved in storage
     if (savedTheme) {
-        themecheckbox.checked = savedTheme === "dark";
+        themecheckbox.checked = savedTheme === "dark"; // if checkbox checked, set to dark
         if (savedTheme === "dark") {
             document.documentElement.classList.add("dark-theme");
         }
@@ -79,7 +78,7 @@ function translate() { // main function called that processess all inputs
         opl.value = "en"; // set default output language
     }
     if (ipl.value === opl.value) {
-        outputtext.value = inputtext.value; //if both are the same language, just copy input to output
+        outputtext.value = inputtext.value; //if both are the same language, just copy input to output. Saves having to call translation api
     } else if (ipl.value === "" && morsedetected()) { // if auto detect and morse code detected, set to english and translate morse to english
         ipl.value = "mc";
         morsetoenglish();
@@ -106,9 +105,11 @@ function translate() { // main function called that processess all inputs
     }
 };
 
+// code for translate button
 const transbutton = document.getElementById("translate"); // translate button - calling translate as onclick in html doesnt work
 transbutton.addEventListener("click", translate);
 
+// code to clear input text button
 function clearinput() {
     inputtext.value = "";
     charcount.textContent = "0";
@@ -121,6 +122,7 @@ inputtext.addEventListener("keydown", function(event) {
         translate();
     }
 });
+
 
 // Morse code implementation
 
@@ -302,33 +304,25 @@ function morseToSpeakable(morseText) {
 function inputSpeech() {
     let inputsp = new SpeechSynthesisUtterance(inputtext.value);
     inputsp.lang = ipl.value;
-    if (ipl.value === "" && morsedetected()) { // set auto to english if morse detecetd
-        const autoVoice = getEnglishVoice();
-        if (autoVoice) {            
-            inputsp.voice = autoVoice;
-        } else {
-            console.warn("Preferred Morse voice not found, using default voice");
-        }         
-        inputsp.lang = "en"; // set to english voice for morse code speaking
-        inputsp.text = morseToSpeakable(inputtext.value);
+    englishVoice = getEnglishVoice(); // get preferred english voice for morse code and english speaking
+    if (!englishVoice) {
+        console.warn("Preferred English voice not found, using default voice");
+    }
+    
+    if (ipl.value === "") {
+        inputsp.voice = englishVoice;        
+        inputsp.lang = "en"; // set to english voice for auto speaking, best I can do since auto could be any language
+        if (morsedetected()) { // set auto to english if morse detecetd
+        inputsp.text = morseToSpeakable(inputtext.value); 
+      }
     }
     if (ipl.value === "mc") {
-        const morseVoice = getEnglishVoice();
-        if (morseVoice) {
-            inputsp.voice = morseVoice;
-        } else {
-            console.warn("Preferred Morse voice not found, using default voice");
-        }
+        inputsp.voice = englishVoice;  
         inputsp.lang = "en"; // set to english voice for morse code speaking
         inputsp.text = morseToSpeakable(inputtext.value);
     }
     if (inputsp.lang === "en") {
-        const englishVoice = getEnglishVoice(); 
-        if (englishVoice) {
-            inputsp.voice = englishVoice;
-        } else {
-            console.warn("Preferred English voice not found, using default voice");
-        }
+        inputsp.voice = englishVoice;  
     }
     if(!voicesReady) loadVoices();
     if (speechSynthesis.speaking) speechSynthesis.cancel(); // stop current speech if still speaking
@@ -511,7 +505,7 @@ function renderHistory() { // create history list from local storage (do upon pa
     });
 }
 
-function saveHistory(history) { // save to local storage
+function saveHistory(history) { // save updated list to local storage
     localStorage.setItem(histstorage, JSON.stringify(history));
 }
 
@@ -538,6 +532,8 @@ function retranslateFromHistory({iplang, text, input, oplang}) {
     closeNav();
 }
 
+
+// Fun facts about languages - change when language selected
 function displayFunFact() {
     const funfacts = document.getElementById("funfacts");
     for (let key in facts) {
