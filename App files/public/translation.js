@@ -528,6 +528,7 @@ function retranslateFromHistory({iplang, text, input, oplang}) {
     inputtext.value = input;
     ipl.value = iplang; // set input language to language code stored with this history text
     opl.value = oplang; // set output language to language code stored with this history text
+    if (iplang === "auto") ipl.value = ""; // if auto detected, set to blank for translation function
     translate();
     closeNav();
 }
