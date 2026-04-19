@@ -80,9 +80,8 @@ function translate() { // main function called that processess all inputs
     if (ipl.value === opl.value) {
         outputtext.value = inputtext.value; //if both are the same language, just copy input to output. Saves having to call translation api
     } else if (ipl.value === "" && morsedetected()) { // if auto detect and morse code detected, set to english and translate morse to english
-        ipl.value = "mc";
         morsetoenglish();
-        addToHistory(ipl.value, outputtext.value, inputtext.value, opl.value); // add to history after translation
+        addToHistory("mc", outputtext.value, inputtext.value, opl.value); // add to history after translation
     }
     else if (inputtext.value === "") {
         outputtext.value = ""; //if input is empty, clear output, dont call translation
