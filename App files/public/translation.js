@@ -80,6 +80,7 @@ function translate() { // main function called that processess all inputs
     if (ipl.value === opl.value) {
         outputtext.value = inputtext.value; //if both are the same language, just copy input to output. Saves having to call translation api
     } else if (ipl.value === "" && morsedetected()) { // if auto detect and morse code detected, set to english and translate morse to english
+        opl.value = "en";
         morsetoenglish();
         addToHistory("mc", outputtext.value, inputtext.value, opl.value); // add to history after translation
     }
@@ -313,7 +314,7 @@ function inputSpeech() {
         }
         if (morsedetected()) { // set auto to english if morse detecetd
             inputsp.text = morseToSpeakable(inputtext.value); 
-      }
+        }
     }
     
     if (ipl.value === "mc") {
