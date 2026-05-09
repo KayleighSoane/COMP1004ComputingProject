@@ -152,7 +152,7 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
     color: var(--bt);
 }
@@ -160,7 +160,7 @@ body {
     display: block;
     font-family: 'courier new', courier, monospace;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 17px;
     color: var(--tc);
     padding: 8px 8px 8px 32px;
     text-decoration: none;
@@ -175,12 +175,12 @@ body {
     transition-duration: 0.3s;
 }
 #about-icon {
-    font-size: 14px;
+    font-size: 17px;
 }
 #newaboutmessage {
     display: none;
     font-family: Arial;
-    font-size: 12px;
+    font-size: 14px;
     margin: 0px 20px;
     color: var(--tc);
     padding-bottom: 10px;
@@ -190,12 +190,12 @@ body {
 
 #historylist {
     color: black;
-    font-size: 12px;
+    font-size: 13px;
     font-family: arial;
     list-style-type: none;
     white-space: nowrap;
     overflow-x: auto;
-    margin: 0 20px;
+    margin: 0 30px;
 }
 #historylist::-webkit-scrollbar { /* for unsupported browsers */
     width: 5px;
@@ -224,7 +224,7 @@ ul {
     border-radius: 30px;
     border: 1px solid var(--bt);
     color: var(--tc);
-    font-size: 10px;
+    font-size: 11px;
     cursor: pointer;
     margin-top: 10px;
     margin-left: 32px;
@@ -487,16 +487,17 @@ select option {
     position: relative;
 }
 #copy-message {
-    display: none;
+    opacity: 0;
     position: absolute;
     font-size: 14px;
-    font-family: arial;
+    font-family: Arial;
     top: -25px;
     right: 0;
     background: var(--greencontr);
-    color: var(--obf);
+    color: black;
     padding: 5px 10px;
     border-radius: 5px;
+    box-shadow: 1px 1px 3px var(--sh);
 }
 
 

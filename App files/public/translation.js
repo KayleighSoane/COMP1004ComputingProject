@@ -277,7 +277,7 @@ function loadVoices() { // load voices on page load
 
 
 function getEnglishVoice() {
-    const preferredEnglishVoiceM = "Microsoft Hazel Desktop - English (Great Britain)"; // microsoft browser
+    const preferredEnglishVoiceM = "Microsoft Libby Online (Natural) - English (United Kingdom)"; // microsoft browser
     const preferredEngishvoiceG = "Google UK English Female"; // google browser
     let voices = availableVoices
     return voices.find(v => v.name === preferredEnglishVoiceM) 
@@ -303,26 +303,37 @@ function morseToSpeakable(morseText) {
 function inputSpeech() {
     let inputsp = new SpeechSynthesisUtterance(inputtext.value);
     inputsp.lang = ipl.value;
-    englishVoice = getEnglishVoice(); // get preferred english voice for morse code and english speaking
-    if (!englishVoice) {
-        console.warn("Preferred English voice not found, using default voice");
-    }
-    
+    const englishVoice = getEnglishVoice();
+
     if (ipl.value === "") {
-        inputsp.voice = englishVoice;        
-        inputsp.lang = "en"; // set to english voice for auto speaking, best I can do since auto could be any language
+        if (englishVoice) {
+            inputsp.voice = englishVoice; // set to english voice for auto speaking, best I can do since auto could be any language
+        } else {
+            console.warn("Preferred English voice not found, using default voice");
+        }
         if (morsedetected()) { // set auto to english if morse detecetd
-        inputsp.text = morseToSpeakable(inputtext.value); 
+            inputsp.text = morseToSpeakable(inputtext.value); 
       }
     }
+    
     if (ipl.value === "mc") {
-        inputsp.voice = englishVoice;  
-        inputsp.lang = "en"; // set to english voice for morse code speaking
+        if (englishVoice) {
+            inputsp.voice = englishVoice;
+        } else {
+            console.warn("Preferred English voice not found, using default voice");
+        }
         inputsp.text = morseToSpeakable(inputtext.value);
     }
+
     if (inputsp.lang === "en") {
-        inputsp.voice = englishVoice;  
+        if (englishVoice) {
+            inputsp.voice = englishVoice;
+        } else {
+            console.warn("Preferred English voice not found, using default voice");
+        } 
+
     }
+
     if(!voicesReady) loadVoices();
     if (speechSynthesis.speaking) speechSynthesis.cancel(); // stop current speech if still speaking
     else speechSynthesis.speak(inputsp);
@@ -331,32 +342,34 @@ function inputSpeech() {
 function outputSpeech() {
     let outputsp = new SpeechSynthesisUtterance(outputtext.value);
     outputsp.lang = opl.value;
+    const englishVoice = getEnglishVoice();
+
     if (opl.value === "") {
-        const autovoice = getEnglishVoice();
-        if (autovoice) {
-            outputsp.voice = autovoice;
-        } else {
-            console.warn("Preferred Morse voice not found, using default voice");
-        }
-    }
-    if (opl.value === "mc") {
-        const morseVoice = getEnglishVoice();
-        if (morseVoice) {
-        outputsp.voice = morseVoice;
-        } else {
-            console.warn("Preferred Morse voice not found, using default voice");
-        }
-        outputsp.lang = "en"; // set to english voice for morse code speaking
-        outputsp.text = morseToSpeakable(outputtext.value);
-    }
-    if (opl.value === "en") {
-    const englishVoice = getEnglishVoice(); 
         if (englishVoice) {
             outputsp.voice = englishVoice;
         } else {
             console.warn("Preferred English voice not found, using default voice");
         }
     }
+
+    if (opl.value === "mc") {
+        if (englishVoice) {
+            outputsp.voice = englishVoice;
+        } else {
+            console.warn("Preferred English voice not found, using default voice");
+        }
+        outputsp.lang = "en"; // set to english voice for morse code speaking
+        outputsp.text = morseToSpeakable(outputtext.value);
+    }
+
+    if (opl.value === "en") {
+        if (englishVoice) {
+            outputsp.voice = englishVoice;
+        } else {
+            console.warn("Preferred English voice not found, using default voice");
+        }
+    }
+
     if (!voicesReady) loadVoices();
     if (speechSynthesis.speaking) speechSynthesis.cancel(); // stop current speech if still speaking
     else speechSynthesis.speak(outputsp);
@@ -390,9 +403,10 @@ function copyToClipboard() {
     navigator.clipboard.writeText(textToCopy).then(() => {
         if (copyMessage) {
             copyMessage.textContent = "Copied";
-            copyMessage.style.display = "block";
+            copyMessage.style.opacity = "1";
+            copyMessage.style.transition = "opacity ease 180ms";
             setTimeout(() => {
-                copyMessage.style.display = "none";
+                copyMessage.style.opacity = "0";
             }, 1000);
         }
     }).catch(err => {
