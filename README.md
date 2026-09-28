@@ -2,6 +2,8 @@
 
 **Stand-up meeting leader: Vivek Singh**
 
+Project Portfolio: https://v3.pebblepad.co.uk/spa/#/public/mtw79Zycbs3g89rhgf9sbjhgnh
+
 ### A Translation Tool
 In this project I will be making an accessible and easy-to-use translator tool. International students, who make up a quarter of the student population[1], express difficulties integrating into student life due to the language barrier. This can affect their social life and their ability to connect with their peers[2]. It can also affect their academic performance and prevent them from reaching their full potential[3].
 <br>
